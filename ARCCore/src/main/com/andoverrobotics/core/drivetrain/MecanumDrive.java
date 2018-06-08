@@ -53,17 +53,17 @@ public class MecanumDrive extends StrafingDriveTrain {
 
     double robotTurn = displacementInInches * ticksPerInch;
 
-    motorFL.setTargetPosition((int) (robotTurn));
-    motorFR.setTargetPosition((int) (robotTurn));
-    motorBL.setTargetPosition((int) (robotTurn));
-    motorBR.setTargetPosition((int) (robotTurn));
+    leftDiagonal.addTargetPosition((int) (robotTurn));
+    rightDiagonal.addTargetPosition((int) (robotTurn));
+    leftSide.addTargetPosition((int) (robotTurn));
+    rightSide.addTargetPosition((int) (robotTurn));
 
-    motorFL.setPower(power);
-    motorFR.setPower(power);
-    motorBL.setPower(power);
-    motorBR.setPower(power);
+    leftDiagonal.setPower(power);
+    rightDiagonal.setPower(power);
+    leftSide.setPower(power);
+    rightSide.setPower(power);
 
-    while (motorFL.isBusy() && motorFR.isBusy() && motorBL.isBusy() && motorBR.isBusy() && opModeIsActive()) {
+    while (leftDiagonal.isBusy() && rightDiagonal.isBusy() && leftSide.isBusy() && rightSide.isBusy() && opModeIsActive()) {
       reportMotorPositions();
     }
 
@@ -100,17 +100,17 @@ public class MecanumDrive extends StrafingDriveTrain {
     setMotorMode(STOP_AND_RESET_ENCODER);
     setMotorMode(RUN_TO_POSITION);
 
-    motorFL.setTargetPosition((int) (leftDegrees / 360.0 * ticksPer360));
-    motorFR.setTargetPosition((int) (rightDegrees / 360.0 * ticksPer360));
-    motorBL.setTargetPosition((int) (leftDegrees / 360.0 * ticksPer360));
-    motorBR.setTargetPosition((int) (rightDegrees / 360.0 * ticksPer360));
+    leftDiagonal.addTargetPosition((int) (leftDegrees / 360.0 * ticksPer360));
+    rightDiagonal.addTargetPosition((int) (rightDegrees / 360.0 * ticksPer360));
+    leftSide.addTargetPosition((int) (leftDegrees / 360.0 * ticksPer360));
+    rightSide.addTargetPosition((int) (rightDegrees / 360.0 * ticksPer360));
 
-    motorFL.setPower(leftPower);
-    motorFR.setPower(rightPower);
-    motorBL.setPower(leftPower);
-    motorBR.setPower(rightPower);
+    leftDiagonal.setPower(leftPower);
+    rightDiagonal.setPower(rightPower);
+    leftSide.setPower(leftPower);
+    rightSide.setPower(rightPower);
 
-    while (motorFL.isBusy() && motorFR.isBusy() && motorBL.isBusy() && motorBR.isBusy() && opModeIsActive()) {
+    while (leftDiagonal.isBusy() && rightDiagonal.isBusy() && leftSide.isBusy() && rightSide.isBusy() && opModeIsActive()) {
       reportMotorPositions();
     }
 
@@ -128,27 +128,27 @@ public class MecanumDrive extends StrafingDriveTrain {
     power = Range.clip(power, -1, 1);
 
     // Setting the target positions
-    motorFL.setTargetPosition((int)(distanceInInches * -ticksPerInch));
-    motorBL.setTargetPosition((int)(distanceInInches * ticksPerInch));
-    motorFR.setTargetPosition((int)(distanceInInches * ticksPerInch));
-    motorBR.setTargetPosition((int)(distanceInInches * -ticksPerInch));
+    leftDiagonal.addTargetPosition((int)(distanceInInches * -ticksPerInch));
+    leftSide.addTargetPosition((int)(distanceInInches * ticksPerInch));
+    rightDiagonal.addTargetPosition((int)(distanceInInches * ticksPerInch));
+    rightSide.addTargetPosition((int)(distanceInInches * -ticksPerInch));
 
     // Set encoder mode to RUN_TO_POSITION
     setMotorMode(RUN_TO_POSITION);
 
-    motorFR.setPower(power);
-    motorBL.setPower(power);
-    motorFL.setPower(power);
-    motorBR.setPower(power);
+    rightDiagonal.setPower(power);
+    leftSide.setPower(power);
+    leftDiagonal.setPower(power);
+    rightSide.setPower(power);
 
     // While loop for updating telemetry
-    while(motorFL.isBusy() && motorFR.isBusy() && opModeIsActive()){
+    while(leftDiagonal.isBusy() && rightDiagonal.isBusy() && opModeIsActive()){
 
       // Updates the position of the motors
-      double LPos = motorFL.getCurrentPosition();
-      double RPos = motorFR.getCurrentPosition();
+      double LPos = leftDiagonal.getCurrentPosition();
+      double RPos = rightDiagonal.getCurrentPosition();
 
-      while (motorFL.isBusy() && motorFR.isBusy() && motorBL.isBusy() && motorBR.isBusy() && opModeIsActive()) {
+      while (leftDiagonal.isBusy() && rightDiagonal.isBusy() && leftSide.isBusy() && rightSide.isBusy() && opModeIsActive()) {
         reportMotorPositions();
       }
 
@@ -186,20 +186,20 @@ public class MecanumDrive extends StrafingDriveTrain {
   public void setMovementPower(double power) {
     setMotorMode(RUN_WITHOUT_ENCODER);
 
-    motorFL.setPower(power);
-    motorFR.setPower(power);
-    motorBL.setPower(power);
-    motorBR.setPower(power);
+    leftDiagonal.setPower(power);
+    rightDiagonal.setPower(power);
+    leftSide.setPower(power);
+    rightSide.setPower(power);
   }
 
   @Override
   public void setRotationPower(double power) { //clockwise if power is positive
     setMotorMode(RUN_WITHOUT_ENCODER);
 
-    motorFL.setPower(power);
-    motorFR.setPower(-power);
-    motorBL.setPower(power);
-    motorBR.setPower(-power);
+    leftDiagonal.setPower(power);
+    rightDiagonal.setPower(-power);
+    leftSide.setPower(power);
+    rightSide.setPower(-power);
   }
 
   @Override
@@ -209,19 +209,19 @@ public class MecanumDrive extends StrafingDriveTrain {
 
   @Override
   protected DcMotor[] getMotors() {
-    return new DcMotor[]{motorFL, motorBR, motorBL, motorBR};
+    return new DcMotor[]{leftDiagonal, rightSide, leftSide, rightSide};
   }
 
   private void reportMotorPositions() {
-    double FLPos = motorFL.getCurrentPosition();
-    double FRPos = motorFR.getCurrentPosition();
-    double BLPos = motorBL.getCurrentPosition();
-    double BRPos = motorBR.getCurrentPosition();
+    double FLPos = leftDiagonal.getCurrentPosition();
+    double FRPos = rightDiagonal.getCurrentPosition();
+    double BLPos = leftSide.getCurrentPosition();
+    double BRPos = rightSide.getCurrentPosition();
 
-    opMode.telemetry.addData("motorFL Pos:", FLPos);
-    opMode.telemetry.addData("motorFR Pos:", FRPos);
-    opMode.telemetry.addData("motorBL Pos:", BLPos);
-    opMode.telemetry.addData("motorBR Pos:", BRPos);
+    opMode.telemetry.addData("leftDiagonal Pos:", FLPos);
+    opMode.telemetry.addData("rightDiagonal Pos:", FRPos);
+    opMode.telemetry.addData("leftSide Pos:", BLPos);
+    opMode.telemetry.addData("rightSide Pos:", BRPos);
 
     opMode.telemetry.update();
   }
