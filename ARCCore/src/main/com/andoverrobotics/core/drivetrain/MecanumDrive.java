@@ -1,32 +1,36 @@
 package com.andoverrobotics.core.drivetrain;
 
-import com.andoverrobotics.core.utilities.Converter;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
-
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 
+import com.andoverrobotics.core.utilities.Converter;
+import com.andoverrobotics.core.utilities.IMotor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
+
 public class MecanumDrive extends StrafingDriveTrain {
 
-  private DcMotor motorFL;
-  private DcMotor motorFR;
-  private DcMotor motorBL;
-  private DcMotor motorBR;
+  private final IMotor leftDiagonal;
+  private final IMotor rightDiagonal;
+  private final IMotor leftSide;
+  private final IMotor rightSide;
+
   private final int ticksPerInch;
   private final int ticksPer360;
 
-  public MecanumDrive(DcMotor motorL, DcMotor motorR, OpMode opMode,
-                      int ticksPerInch, int ticksPer360) {
+  public MecanumDrive(IMotor leftDiagonal, IMotor rightDiagonal, IMotor leftSide, IMotor rightSide,
+      OpMode opMode, int ticksPerInch, int ticksPer360) {
+
     super(opMode);
 
-    this.motorFL = motorFL;
-    this.motorFR = motorFR;
-    this.motorBL = motorBL;
-    this.motorBR = motorBR;
+    this.leftDiagonal = leftDiagonal;
+    this.rightDiagonal = rightDiagonal;
+    this.leftSide = leftSide;
+    this.rightSide = rightSide;
+
     this.ticksPerInch = ticksPerInch;
     this.ticksPer360 = ticksPer360;
   }
@@ -161,6 +165,21 @@ public class MecanumDrive extends StrafingDriveTrain {
     strafeRight(power, -distanceInInches);
   }
 
+  @Override
+  public void strafeToCoordinate(double xInInches, double yInInches, double power) {
+
+  }
+
+  @Override
+  public void strafeDegrees(int degrees, double distanceInInches, double power) {
+
+  }
+
+  @Override
+  public void setDegreeOfStrafe(int degrees, double power) {
+
+  }
+
   // -- TeleOp methods --
 
   @Override
@@ -181,6 +200,11 @@ public class MecanumDrive extends StrafingDriveTrain {
     motorFR.setPower(-power);
     motorBL.setPower(power);
     motorBR.setPower(-power);
+  }
+
+  @Override
+  public void setMovementAndRotation(double movePower, double rotatePower) {
+
   }
 
   @Override

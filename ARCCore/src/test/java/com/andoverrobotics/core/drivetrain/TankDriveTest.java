@@ -3,26 +3,24 @@ package com.andoverrobotics.core.drivetrain;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import com.andoverrobotics.core.utilities.IMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.AdditionalMatchers;
 
 public class TankDriveTest {
 
   private final OpMode opMode = mock(OpMode.class);
-  private final DcMotor motorL = mock(DcMotor.class),
-      motorR = mock(DcMotor.class);
+  private final IMotor motorL = mock(IMotor.class),
+      motorR = mock(IMotor.class);
   private DriveTrain driveTrain = new TankDrive(motorL, motorR, opMode,50, 720);
 
   @Before
   public void setUp() {
     reset(motorL);
     reset(motorR);
-    when(motorL.getTargetPosition()).thenReturn(0);
-    when(motorR.getTargetPosition()).thenReturn(0);
   }
 
   @Test
@@ -50,6 +48,12 @@ public class TankDriveTest {
   }
 
   @Test
+  public void driveForwardsWithZeroPower() {
+    driveTrain.driveForwards(2, 0);
+    verifyPowersSet(0, 0);
+  }
+
+  @Test
   public void driveBackwards() {
     driveTrain.driveBackwards(5, 0.7);
     verifyDrivenDisplacementWithPower(-5, -0.7);
@@ -65,6 +69,12 @@ public class TankDriveTest {
   public void driveBackwardsWithNegativePower() {
     driveTrain.driveBackwards(5, -0.7);
     verifyDrivenDisplacementWithPower(-5, -0.7);
+  }
+
+  @Test
+  public void driveBackwardsWithZeroPower() {
+    driveTrain.driveBackwards(2, 0);
+    verifyPowersSet(0, 0);
   }
 
   @Test
@@ -139,6 +149,21 @@ public class TankDriveTest {
     verifyPowersSet(0.8, -0.8);
   }
 
+  @Test
+  public void setMovementAndRotation() {
+    driveTrain.setMovementAndRotation(0.5, 0.2);
+    verifyPowersSet(0.7, 0.3);
+
+    driveTrain.setMovementAndRotation(0.5, 0.8);
+    verifyPowersSet(1, -0.3/1.3);
+
+    driveTrain.setMovementAndRotation(-0.4, -0.3);
+    verifyPowersSet(-0.7, -0.1);
+
+    driveTrain.setMovementAndRotation(-0.9, -0.2);
+    verifyPowersSet(-1, -0.7/1.1);
+  }
+
   // -- Start verification methods --
 
   private void verifyDrivenDisplacementWithPower(int displacementInInches, double power) {
@@ -147,12 +172,12 @@ public class TankDriveTest {
   }
 
   private void verifyPowersSet(double left, double right) {
-    verify(motorL).setPower(left);
-    verify(motorR).setPower(right);
+    verify(motorL).setPower(AdditionalMatchers.eq(left, 1e-5));
+    verify(motorR).setPower(AdditionalMatchers.eq(right, 1e-5));
   }
 
   private void verifyTargetPositionOffset(int leftTicks, int rightTicks) {
-    verify(motorL).setTargetPosition(leftTicks);
-    verify(motorR).setTargetPosition(rightTicks);
+    verify(motorL).addTargetPosition(leftTicks);
+    verify(motorR).addTargetPosition(rightTicks);
   }
 }

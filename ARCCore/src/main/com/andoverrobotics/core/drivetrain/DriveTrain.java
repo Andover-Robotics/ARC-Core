@@ -1,9 +1,9 @@
 package com.andoverrobotics.core.drivetrain;
 
 
+import com.andoverrobotics.core.utilities.IMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 
 /**
@@ -58,6 +58,8 @@ public abstract class DriveTrain {
   // [-1, 1] positive is clockwise
   public abstract void setRotationPower(double power);
 
+  public abstract void setMovementAndRotation(double movePower, double rotatePower);
+
   protected boolean opModeIsActive() {
     boolean isAutonomous = opMode instanceof LinearOpMode;
 
@@ -65,17 +67,17 @@ public abstract class DriveTrain {
   }
 
   public void stop() {
-    for (DcMotor motor : getMotors()) {
+    for (IMotor motor : getMotors()) {
       motor.setPower(0);
     }
   }
 
   // -- Internal methods
 
-  protected abstract DcMotor[] getMotors();
+  protected abstract IMotor[] getMotors();
 
   protected void setMotorMode(RunMode mode) {
-    for (DcMotor motor : getMotors()) {
+    for (IMotor motor : getMotors()) {
       motor.setMode(mode);
     }
   }
