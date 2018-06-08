@@ -81,4 +81,12 @@ public abstract class DriveTrain {
       motor.setMode(mode);
     }
   }
+
+  protected boolean isBusy() {
+    for (IMotor motor : getMotors()) {
+      if (motor.isBusy())
+        return true;
+    }
+    return false;
+  }
 }

@@ -66,22 +66,9 @@ public class TankDrive extends DriveTrain {
       power *= -1;
     }
 
-    setMotorMode(STOP_AND_RESET_ENCODER);
-    setMotorMode(RUN_TO_POSITION);
-
     double robotTurn = displacementInInches * ticksPerInch;
 
-    motorL.addTargetPosition((int) (robotTurn));
-    motorR.addTargetPosition((int) (robotTurn));
-
-    motorL.setPower(power);
-    motorR.setPower(power);
-
-    while (motorL.isBusy() && motorR.isBusy() && opModeIsActive()) {
-    }
-
-    stop();
-    setMotorMode(RUN_USING_ENCODER);
+    runWithEncoder((int) robotTurn, (int) robotTurn, power, power);
   }
 
   @Override
@@ -110,16 +97,30 @@ public class TankDrive extends DriveTrain {
   private void rotateWithEncoder(int leftDegrees, int rightDegrees,
       double leftPower, double rightPower) {
 
+    runWithEncoder(
+        (int) Math.round(leftDegrees / 360.0 * ticksPer360),
+        (int) Math.round(rightDegrees / 360.0 * ticksPer360),
+        leftPower, rightPower);
+  }
+
+  private void runWithEncoder(int leftTickOffset, int rightTickOffset,
+      double leftPower, double rightPower) {
+
+    // Fails unit tests
+    /*Log.d("TankDrive Encoder",
+        String.format("leftTickOffset=%d rightTickOffset=%d leftPower=%.3f rightPower=%.3f",
+        leftTickOffset, rightTickOffset, leftPower, rightPower));*/
+
     setMotorMode(STOP_AND_RESET_ENCODER);
     setMotorMode(RUN_TO_POSITION);
 
-    motorL.addTargetPosition((int) (leftDegrees / 360.0 * ticksPer360));
-    motorR.addTargetPosition((int) (rightDegrees / 360.0 * ticksPer360));
+    motorL.addTargetPosition(leftTickOffset);
+    motorR.addTargetPosition(rightTickOffset);
 
     motorL.setPower(leftPower);
     motorR.setPower(rightPower);
 
-    while (motorL.isBusy() && motorR.isBusy() && opModeIsActive()) {
+    while (isBusy() && opModeIsActive()) {
     }
 
     stop();

@@ -41,8 +41,8 @@ public abstract class StrafingDriveTrain extends DriveTrain {
 
   // [0, 360]
   // [-1, 1]
-  public final void setDegreeOfStrafe(int degrees) {
-    setDegreeOfStrafe(degrees, defaultPower);
+  public final void setStrafe(int degrees) {
+    setStrafe(degrees, defaultPower);
   }
-  public abstract void setDegreeOfStrafe(int degrees, double power);
+  public abstract void setStrafe(int degrees, double power);
 }

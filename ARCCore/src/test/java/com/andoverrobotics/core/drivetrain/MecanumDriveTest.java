@@ -38,7 +38,33 @@ public class MecanumDriveTest {
   }
 
   @Test
-  public void driveBackwards() {
+  public void driveBackwardsPositivePower() {
+    driveTrain.driveBackwards(8, 0.6);
+
+    verify(leftDiagonal).addTargetPosition(-8 * 5);
+    verify(rightDiagonal).addTargetPosition(-8 * 5);
+
+    verifyDiagonalPowers(-0.6, -0.6);
+  }
+
+  @Test
+  public void driveBackwardsNegativePower() {
+    driveTrain.driveBackwards(8, -0.4);
+
+    verify(leftDiagonal).addTargetPosition(-8 * 5);
+    verify(rightDiagonal).addTargetPosition(-8 * 5);
+
+    verifyDiagonalPowers(-0.4, -0.4);
+  }
+
+  @Test
+  public void driveBackwardsNegativeDistance() {
+    driveTrain.driveBackwards(-4, 0.6);
+
+    verify(leftDiagonal).addTargetPosition(-4 * 5);
+    verify(rightDiagonal).addTargetPosition(-4 * 5);
+
+    verifyDiagonalPowers(-0.6, -0.6);
   }
 
   @Test
@@ -65,18 +91,9 @@ public class MecanumDriveTest {
   public void setRotationPower() {
   }
 
-  private void verifySidesAddTargetPositions(int ticksLeftSide, int ticksRightSide) {
-    verify(leftSide).addTargetPosition(ticksLeftSide);
-    verify(rightSide).addTargetPosition(ticksRightSide);
-  }
-
   private void verifyDiagonalPowers(double powerLeftDiagonal, double powerRightDiagonal) {
     verifyPairPower(leftDiagonal, powerLeftDiagonal);
     verifyPairPower(rightDiagonal, powerRightDiagonal);
-  }
-
-  private void verifyAddTargetPosition(MotorPair pair, int targetTicks) {
-    verify(pair).addTargetPosition(targetTicks);
   }
 
   private void verifyPairPower(MotorPair pair, double power) {
