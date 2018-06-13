@@ -1,5 +1,6 @@
 package com.andoverrobotics.core.drivetrain;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -81,48 +82,42 @@ public class TankDriveTest {
   public void rotateClockwise() {
     driveTrain.rotateClockwise(270, 0.6);
 
-    verifyTargetPositionOffset(270 * 2, -270 * 2);
-    verifyPowersSet(0.6, -0.6);
+    verifyRunToPosition(270 * 2, -270 * 2, 0.6, -0.6);
   }
 
   @Test
   public void rotateClockwiseNegativeDegree() {
     driveTrain.rotateClockwise(-45, 0.4);
 
-    verifyTargetPositionOffset((360-45) * 2, (45-360) * 2);
-    verifyPowersSet(0.4, -0.4);
+    verifyRunToPosition((360-45) * 2, (45-360) * 2, 0.4, -0.4);
   }
 
   @Test
   public void rotateClockwiseNegativePower() {
     driveTrain.rotateClockwise(45, -0.4);
 
-    verifyTargetPositionOffset(45 * 2, -45 * 2);
-    verifyPowersSet(0.4, -0.4);
+    verifyRunToPosition(45 * 2, -45 * 2, 0.4, -0.4);
   }
 
   @Test
   public void rotateCounterClockwise() {
     driveTrain.rotateCounterClockwise(70, 0.2);
 
-    verifyTargetPositionOffset(-70 * 2, 70 * 2);
-    verifyPowersSet(-0.2, 0.2);
+    verifyRunToPosition(-70 * 2, 70 * 2, -0.2, 0.2);
   }
 
   @Test
   public void rotateCounterClockwiseNegativePower() {
     driveTrain.rotateCounterClockwise(80, -0.3);
 
-    verifyTargetPositionOffset(-80 * 2, 80 * 2);
-    verifyPowersSet(-0.3, 0.3);
+    verifyRunToPosition(-80 * 2, 80 * 2, -0.3, 0.3);
   }
 
   @Test
   public void rotateCounterClockwiseNegativeDegree() {
     driveTrain.rotateCounterClockwise(-50, 0.5);
 
-    verifyTargetPositionOffset((50-360) * 2, (360-50) * 2);
-    verifyPowersSet(-0.5, 0.5);
+    verifyRunToPosition((50-360) * 2, (360-50) * 2, -0.5, 0.5);
   }
 
   @Test
@@ -166,18 +161,20 @@ public class TankDriveTest {
 
   // -- Start verification methods --
 
-  private void verifyDrivenDisplacementWithPower(int displacementInInches, double power) {
-    verifyTargetPositionOffset(displacementInInches * 50, displacementInInches * 50);
-    verifyPowersSet(power, power);
+  private void verifyDrivenDisplacementWithPower(
+      int inches, double power) {
+    verifyRunToPosition(inches * 50, inches * 50, power, power);
+  }
+
+  private void verifyRunToPosition(int ticksLeft, int ticksRight, double powerLeft, double powerRight) {
+    verify(motorL).startRunToPosition(
+        eq(ticksLeft), AdditionalMatchers.eq(powerLeft, 1e-4));
+    verify(motorR).startRunToPosition(
+        eq(ticksRight), AdditionalMatchers.eq(powerRight, 1e-4));
   }
 
   private void verifyPowersSet(double left, double right) {
-    verify(motorL).setPower(AdditionalMatchers.eq(left, 1e-5));
-    verify(motorR).setPower(AdditionalMatchers.eq(right, 1e-5));
-  }
-
-  private void verifyTargetPositionOffset(int leftTicks, int rightTicks) {
-    verify(motorL).addTargetPosition(leftTicks);
-    verify(motorR).addTargetPosition(rightTicks);
+    verify(motorL).setPower(AdditionalMatchers.eq(left, 1e-4));
+    verify(motorR).setPower(AdditionalMatchers.eq(right, 1e-4));
   }
 }

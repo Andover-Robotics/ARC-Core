@@ -1,9 +1,7 @@
 package com.andoverrobotics.core.drivetrain;
 
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 
 import com.andoverrobotics.core.utilities.Converter;
 import com.andoverrobotics.core.utilities.IMotor;
@@ -111,14 +109,8 @@ public class TankDrive extends DriveTrain {
         String.format("leftTickOffset=%d rightTickOffset=%d leftPower=%.3f rightPower=%.3f",
         leftTickOffset, rightTickOffset, leftPower, rightPower));*/
 
-    setMotorMode(STOP_AND_RESET_ENCODER);
-    setMotorMode(RUN_TO_POSITION);
-
-    motorL.addTargetPosition(leftTickOffset);
-    motorR.addTargetPosition(rightTickOffset);
-
-    motorL.setPower(leftPower);
-    motorR.setPower(rightPower);
+    motorL.startRunToPosition(leftTickOffset, leftPower);
+    motorR.startRunToPosition(rightTickOffset, rightPower);
 
     while (isBusy() && opModeIsActive()) {
     }

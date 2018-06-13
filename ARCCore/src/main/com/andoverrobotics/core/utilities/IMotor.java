@@ -7,6 +7,8 @@ public interface IMotor {
 
   void addTargetPosition(int tickOffset);
 
+  void startRunToPosition(int tickOffset, double absPower);
+
   void setMode(RunMode mode);
 
   boolean isBusy();
