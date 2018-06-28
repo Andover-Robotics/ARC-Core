@@ -12,7 +12,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Implements the {@link StrafingDriveTrain} for a Mecanum drivetrain.
+ * Implements the {@link StrafingDriveTrain} for a Mecanum drivetrain. <p> See {@link
+ * #fromOctagonalMotors(DcMotor, DcMotor, DcMotor, DcMotor, OpMode, int, int)} and {@link
+ * #fromCrossedMotors(DcMotor, DcMotor, DcMotor, DcMotor, OpMode, int, int)} for instructions about
+ * easier construction.
  */
 public class MecanumDrive extends StrafingDriveTrain {
 
@@ -55,9 +58,16 @@ public class MecanumDrive extends StrafingDriveTrain {
 
   /**
    * Constructs a new MecanumDrive instance that uses the given physical motors, which are arranged
-   * in an octagonal manner. <p> <b>The Octagonal Configuration</b> In the octagonal configuration,
+   * in an octagonal manner. <p> <h2>The Octagonal Configuration</h2> In the octagonal configuration,
    * the front left and the back right motors cause the robot to move forward and to the right
    * (diagonally), and the other two motors cause the robot to move forward and to the left.
+   *
+   * It is named to be "octagonal" because of its diagram:
+   * <pre>
+   *   /-\
+   *   | |
+   *   \-/
+   * </pre>
    *
    * @param motorFL The motor located at the front-left of the robot
    * @param motorFR The motor located at the front-right of the robot
@@ -89,6 +99,13 @@ public class MecanumDrive extends StrafingDriveTrain {
    * in a a crossed manner. <p> <b>The Crossed Configuration</b> In the crossed configuration, the
    * front left and the back right motors cause the robot to move forward and to the left
    * (diagonally), and the other two motors cause the robot to move forward and to the right.
+   *
+   * It is named to be "octagonal" because of its diagram:
+   * <pre>
+   *   \-/
+   *   | |
+   *   /-\
+   * </pre>
    *
    * @param motorFL The motor located at the front-left of the robot
    * @param motorFR The motor located at the front-right of the robot

@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Implements the tank drive drivetrain for either two motors ({@link #fromMotors(DcMotor, DcMotor,
- * OpMode, int, int)}) or four motors ({@link #fromMotors(DcMotor, DcMotor, DcMotor, DcMotor,
- * OpMode, int, int)}.
+ * Implements the tank drive drivetrain for either two motors or four motors. <p> See {@link
+ * #fromMotors(DcMotor, DcMotor, OpMode, int, int)} and {@link #fromMotors(DcMotor, DcMotor,
+ * DcMotor, DcMotor, OpMode, int, int)} for instructions about easier construction.
  */
 public class TankDrive extends DriveTrain {
 
