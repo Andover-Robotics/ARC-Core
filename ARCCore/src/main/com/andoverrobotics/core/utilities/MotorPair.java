@@ -14,7 +14,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Creates a MotorPair
+   * Creates a MotorPair.
    *
    * @param one The first motor in a pair
    * @param two The second motor in a pair
@@ -25,7 +25,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Sets power for both motors
+   * Sets power for both motors. [-1, 1]
    *
    * @param power The power to set the motors
    */
@@ -36,7 +36,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Moves a pair of motors a certain amount based on their current positions
+   * Moves a pair of motors a certain amount based on their current positions.
    *
    * @param position The amount to modify the current positions
    */
@@ -47,7 +47,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Moves a certain amount based on ticks and the absolute value of the power
+   * Moves a certain amount based on ticks and the absolute value of the power.
    *
    * @param tickOffset The amount to move based on ticks
    * @param absPower The power value to move with
@@ -64,7 +64,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Sets the RunMode of both of the motors
+   * Sets the RunMode of both of the motors.
    *
    * @param mode The RunMode to run the motors with (RUN_WITHOUT_ENCODER, RUN_USING_ENCODER,
    *             RUN_TO_POSITION, STOP_AND_RESET_ENCODER)
@@ -76,7 +76,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Checks to see if the motors are running
+   * Checks to see if the motors are running.
    *
    * @return True if any of the motors in the pair are running
    */
