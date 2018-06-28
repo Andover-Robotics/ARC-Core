@@ -14,7 +14,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Creates a MotorPair
+   * Creates a MotorPair.
    *
    * @param one The first motor in a pair
    * @param two The second motor in a pair
@@ -24,6 +24,11 @@ public class MotorPair implements IMotor {
     return new MotorPair(one, two);
   }
 
+  /**
+   * Sets power for both motors. [-1, 1]
+   *
+   * @param power The power to set the motors
+   */
   @Override
   public void setPower(double power) {
     first.setPower(power);
@@ -31,9 +36,9 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Moves a pair of motors a certain amount based on their current posistions
+   * Moves a pair of motors a certain amount based on their current positions.
    *
-   * @param position The amount you want the position changed
+   * @param position The amount to modify the current positions
    */
   @Override
   public void addTargetPosition(int position) {
@@ -42,7 +47,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Moves a certain amount based on ticks and the absolute value of the power
+   * Moves a certain amount based on ticks and the absolute value of the power.
    *
    * @param tickOffset The amount to move based on ticks
    * @param absPower The power value to move with
@@ -59,10 +64,10 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Sets the RunMode of both of the motors
+   * Sets the RunMode of both of the motors.
    *
-   * @param mode The RunMode you want to run with (RUN_WITHOUT_ENCODER, RUN_USING_ENCODER,
-   * RUN_TO_POSITION, STOP_AND_RESET_ENCODER)
+   * @param mode The RunMode to run the motors with (RUN_WITHOUT_ENCODER, RUN_USING_ENCODER,
+   *             RUN_TO_POSITION, STOP_AND_RESET_ENCODER)
    */
   @Override
   public void setMode(RunMode mode) {
@@ -71,7 +76,7 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Checks to see if the motors are running
+   * Checks to see if the motors are running.
    *
    * @return True if any of the motors in the pair are running
    */
