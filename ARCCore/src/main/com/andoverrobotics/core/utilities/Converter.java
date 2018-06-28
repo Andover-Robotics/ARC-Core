@@ -57,35 +57,40 @@ public class Converter {
   /**
    * Converts the given angle measure in degrees to its equivalent value in the [0, 360] range.
    *
-   * @param inputDegrees The angle measure of which the equivalent value in the [0, 360] range
-   *                     will be returned
+   * @param inputDegrees The angle measure of which the equivalent value in the [0, 360] range will
+   * be returned
    * @return The equivalent value of the given angle measure in the [0, 360] range
    */
   public static double normalizedDegrees(final double inputDegrees) {
     double degrees = inputDegrees;
 
-    while (degrees < 0)
+    while (degrees < 0) {
       degrees += 360;
-    while (degrees >= 360)
+    }
+    while (degrees >= 360) {
       degrees -= 360;
+    }
 
     return degrees;
   }
 
   /**
-   * Converts the given angle measure in radians to its equivalent value in the [0, {@link #TAU}] range.
+   * Converts the given angle measure in radians to its equivalent value in the [0, {@link #TAU}]
+   * range.
    *
-   * @param inputRadians The angle measure of which the equivalent value in the [0, {@link #TAU}] range
-   *                     will be returned
+   * @param inputRadians The angle measure of which the equivalent value in the [0, {@link #TAU}]
+   * range will be returned
    * @return The equivalent value of the given angle measure in the [0, {@link #TAU}] range
    */
   public static double normalizedRadians(final double inputRadians) {
     double radians = inputRadians;
 
-    while (radians < 0)
+    while (radians < 0) {
       radians += TAU;
-    while (radians >= TAU)
+    }
+    while (radians >= TAU) {
       radians -= TAU;
+    }
 
     return radians;
   }

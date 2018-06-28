@@ -62,7 +62,7 @@ public class MotorPair implements IMotor {
    * Sets the RunMode of both of the motors
    *
    * @param mode The RunMode you want to run with (RUN_WITHOUT_ENCODER, RUN_USING_ENCODER,
-   *              RUN_TO_POSITION, STOP_AND_RESET_ENCODER)
+   * RUN_TO_POSITION, STOP_AND_RESET_ENCODER)
    */
   @Override
   public void setMode(RunMode mode) {

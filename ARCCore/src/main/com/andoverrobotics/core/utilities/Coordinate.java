@@ -31,7 +31,7 @@ public class Coordinate {
    * direction about the origin.
    *
    * @param degrees The number of degrees to rotate. Positive means counter-clockwise, negative
-   *                means clockwise.
+   * means clockwise.
    * @return The coordinate of the rotated point
    */
   public Coordinate rotate(int degrees) {
