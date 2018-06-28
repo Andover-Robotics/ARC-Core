@@ -13,6 +13,13 @@ public class MotorPair implements IMotor {
     this.second = second;
   }
 
+  /**
+   * Creates a MotorPair
+   *
+   * @param one The first motor in a pair
+   * @param two The second motor in a pair
+   * @return The new MotorPair
+   */
   public static MotorPair of(DcMotor one, DcMotor two) {
     return new MotorPair(one, two);
   }
@@ -23,12 +30,23 @@ public class MotorPair implements IMotor {
     second.setPower(power);
   }
 
+  /**
+   * Moves a pair of motors a certain amount based on their current posistions
+   *
+   * @param position The amount you want the position changed
+   */
   @Override
   public void addTargetPosition(int position) {
     first.setTargetPosition(first.getCurrentPosition() + position);
     second.setTargetPosition(second.getCurrentPosition() + position);
   }
 
+  /**
+   * Moves a certain amount based on ticks and the absolute value of the power
+   *
+   * @param tickOffset The amount to move based on ticks
+   * @param absPower The power value to move with
+   */
   @Override
   public void startRunToPosition(int tickOffset, double absPower) {
     if (tickOffset == 0 || absPower < 1e-5) {
@@ -40,12 +58,23 @@ public class MotorPair implements IMotor {
     setPower(tickOffset > 0 ? Math.abs(absPower) : -Math.abs(absPower));
   }
 
+  /**
+   * Sets the RunMode of both of the motors
+   *
+   * @param mode The RunMode you want to run with (RUN_WITHOUT_ENCODER, RUN_USING_ENCODER,
+   *              RUN_TO_POSITION, STOP_AND_RESET_ENCODER)
+   */
   @Override
   public void setMode(RunMode mode) {
     first.setMode(mode);
     second.setMode(mode);
   }
 
+  /**
+   * Checks to see if the motors are running
+   *
+   * @return True if any of the motors in the pair are running
+   */
   @Override
   public boolean isBusy() {
     return first.isBusy() || second.isBusy();
