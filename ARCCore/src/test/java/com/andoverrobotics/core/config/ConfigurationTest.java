@@ -40,8 +40,8 @@ public class ConfigurationTest {
 
   static class BadTestSchema {
 
-    double motorSpeed;
-    boolean useEncoders;
+    public double motorSpeed;
+    public boolean useEncoders;
     public float badType;
   }
 
