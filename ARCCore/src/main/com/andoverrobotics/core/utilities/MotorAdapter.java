@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 
 /**
- * Adapts a DcMotor to the IMotor interface for the Drivetrains.
+ * Adapts a DcMotor to the IMotor interface for the DriveTrains.
  */
 public class MotorAdapter implements IMotor {
 

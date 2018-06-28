@@ -25,9 +25,9 @@ public class MotorPair implements IMotor {
   }
 
   /**
-   * Sets power for both motors. [-1, 1]
+   * Sets power for both motors.
    *
-   * @param power The power to set the motors
+   * @param power The power to set the motors, between -1 and 1, inclusive
    */
   @Override
   public void setPower(double power) {

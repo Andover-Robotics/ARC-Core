@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Implements the tank drive drivetrain for either two motors or four motors. <p> See {@link
+ * Implements the tank drive DriveTrain for either two motors or four motors. <p> See {@link
  * #fromMotors(DcMotor, DcMotor, OpMode, int, int)} and {@link #fromMotors(DcMotor, DcMotor,
  * DcMotor, DcMotor, OpMode, int, int)} for instructions about easier construction.
  */
@@ -190,7 +190,7 @@ public class TankDrive extends DriveTrain {
   /**
    * Set the power of the motors to move in a straight line without encoders.
    *
-   * @param power The motor power to set [-1, 1]
+   * @param power The motor power to set, between -1 and 1, inclusive
    */
   @Override
   public void setMovementPower(double power) {
@@ -203,7 +203,7 @@ public class TankDrive extends DriveTrain {
   /**
    * Set the power of the motors to rotate without encoders.
    *
-   * @param power The motor power to set [-1, 1]
+   * @param power The motor power to set, between -1 and 1, inclusive
    */
   @Override
   public void setRotationPower(double power) { //clockwise if power is positive
@@ -216,8 +216,8 @@ public class TankDrive extends DriveTrain {
   /**
    * Set both the movement power and the rotation power of the the motors.
    *
-   * @param movePower The motor power to set for movement [-1, 1]
-   * @param rotatePower The motor power to set for rotation [-1, 1]
+   * @param movePower The motor power to set for movement, between -1 and 1, inclusive
+   * @param rotatePower The motor power to set for rotation, between -1 and 1, inclusive
    */
   @Override
   public void setMovementAndRotation(double movePower, double rotatePower) {

@@ -124,9 +124,6 @@ public abstract class StrafingDriveTrain extends DriveTrain {
     setStrafe(0, 1, power);
   }
 
-  // [0, 360]
-  // [-1, 1]
-
   /**
    * Sets the robot to strafe in the direction of the vector <x, y>.
    *
@@ -140,7 +137,7 @@ public abstract class StrafingDriveTrain extends DriveTrain {
   /**
    * Sets the robot to strafe in the direction of (Coordinate) direction with the default power.
    *
-   * @param direction The direction in which to strafe in
+   * @param direction The direction in which to strafe
    */
   public final void setStrafe(Coordinate direction) {
     setStrafe(direction, defaultPower);
@@ -149,7 +146,7 @@ public abstract class StrafingDriveTrain extends DriveTrain {
   /**
    * Sets the robot to strafe in the direction of polarDirection with the default power.
    *
-   * @param polarDirection The polar direction in which to strafe in
+   * @param polarDirection The polar direction in which to strafe
    */
   public final void setStrafe(int polarDirection) {
     setStrafe(polarDirection, defaultPower);
@@ -169,8 +166,8 @@ public abstract class StrafingDriveTrain extends DriveTrain {
   /**
    * Sets the robot to strafe in the direction of (Coordinate) direction at the given power.
    *
-   * @param direction The direction in which to strafe in
-   * @param power The power at which to strafe
+   * @param direction The direction in which to strafe
+   * @param power The power at which to strafe, between -1 and 1, inclusive
    */
   public abstract void setStrafe(Coordinate direction, double power);
 }
