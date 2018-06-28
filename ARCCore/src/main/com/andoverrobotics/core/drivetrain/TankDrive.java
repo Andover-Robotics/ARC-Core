@@ -11,6 +11,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+/**
+ * Implements the tank drive drivetrain for either two motors ({@link #fromMotors(DcMotor, DcMotor,
+ * OpMode, int, int)}) or four motors ({@link #fromMotors(DcMotor, DcMotor, DcMotor, DcMotor,
+ * OpMode, int, int)}.
+ */
 public class TankDrive extends DriveTrain {
 
   private IMotor motorL;
@@ -26,8 +31,10 @@ public class TankDrive extends DriveTrain {
    * @param motorL The left IMotor
    * @param motorR The right IMotor
    * @param opMode The OpMode to set
-   * @param ticksPerInch How many ticks per inch of displacement
-   * @param ticksPer360 How many ticks in one full rotation of the motor
+   * @param ticksPerInch The number of encoder ticks required to cause a diagonal displacement of 1
+   * inch for the robot
+   * @param ticksPer360 The number of encoder ticks required to cause a full rotation for the robot,
+   * when this amount is applied to the left and right sides in opposite directions
    */
   public TankDrive(IMotor motorL, IMotor motorR, OpMode opMode,
       int ticksPerInch, int ticksPer360) {
@@ -45,9 +52,10 @@ public class TankDrive extends DriveTrain {
    * @param motorL The left DcMotor
    * @param motorR The right DcMotor
    * @param opMode The OpMode to set
-   * @param ticksPerInch How many ticks per inch of displacement
-   * @param ticksPer360 How many ticks in one full rotation of the motor
-   *
+   * @param ticksPerInch The number of encoder ticks required to cause a diagonal displacement of 1
+   * inch for the robot
+   * @param ticksPer360 The number of encoder ticks required to cause a full rotation for the robot,
+   * when this amount is applied to the left and right sides in opposite directions
    * @return A TankDrive created with the inputted motors
    */
   public static TankDrive fromMotors(DcMotor motorL, DcMotor motorR, OpMode opMode,
@@ -65,12 +73,14 @@ public class TankDrive extends DriveTrain {
    * @param motorL2 The other left DcMotor
    * @param motorR2 The other right DcMotor
    * @param opMode The OpMode to set
-   * @param ticksPerInch How many ticks per inch of displacement
-   * @param ticksPer360 How many ticks in one full rotation of the motor
-   *
+   * @param ticksPerInch The number of encoder ticks required to cause a diagonal displacement of 1
+   * inch for the robot
+   * @param ticksPer360 The number of encoder ticks required to cause a full rotation for the robot,
+   * when this amount is applied to the left and right sides in opposite directions
    * @return A TankDrive created using MotorPairs
    */
-  public static TankDrive fromMotors(DcMotor motorL1, DcMotor motorL2, DcMotor motorR1, DcMotor motorR2,
+  public static TankDrive fromMotors(DcMotor motorL1, DcMotor motorL2, DcMotor motorR1,
+      DcMotor motorR2,
       OpMode opMode, int ticksPerInch, int ticksPer360) {
 
     return new TankDrive(

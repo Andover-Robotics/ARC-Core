@@ -38,8 +38,9 @@ public class MotorAdapter implements IMotor {
 
   @Override
   public void startRunToPosition(int tickOffset, double absPower) {
-    if (tickOffset == 0 || absPower < 1e-5)
+    if (tickOffset == 0 || absPower < 1e-5) {
       return;
+    }
 
     setMode(RunMode.RUN_TO_POSITION);
     addTargetPosition(tickOffset);

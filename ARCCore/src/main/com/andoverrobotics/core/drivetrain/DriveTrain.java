@@ -8,20 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Created by Lake Yin on 5/23/2018.
+ * Defines the interface for an ordinary DriveTrain object with support for a default motor power.
  */
-
 public abstract class DriveTrain {
 
   protected final OpMode opMode;
   protected double defaultPower;
 
-  /**
-   * The constructor.
-   *
-   * @param opMode The OpMode of the new DriveTrain
-   */
-  public DriveTrain(OpMode opMode) {
+  protected DriveTrain(OpMode opMode) {
     this.opMode = opMode;
   }
 
@@ -148,7 +142,7 @@ public abstract class DriveTrain {
   }
 
   /**
-   * Stops the motor(s)
+   * Stops the motor(s).
    */
   public void stop() {
     for (IMotor motor : getMotors()) {
