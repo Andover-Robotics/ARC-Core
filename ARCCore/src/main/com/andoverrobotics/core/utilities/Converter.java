@@ -1,11 +1,11 @@
 package com.andoverrobotics.core.utilities;
 
-// Radians are [0, 2pi)
+// Radians are [0, tau)
 // Degrees are [0, 360)
 
 /**
  * Provides utility functions that convert between radians and degrees, millimeters and inches, and
- * normalizes angle measures.
+ * normalize angle measures.
  */
 public class Converter {
 
@@ -40,7 +40,7 @@ public class Converter {
    * @param inches The distance, in inches, to be converted into millimeters
    * @return The given distance in millimeters
    */
-  public static double inchesToMillimeter(double inches) {
+  public static double inchesToMillimeters(double inches) {
     return inches * 25.4;
   }
 
@@ -50,7 +50,7 @@ public class Converter {
    * @param millimeters The distance, in millimeters, to be converted into inches
    * @return The given distance in inches
    */
-  public static double millimeterToInches(double millimeters) {
+  public static double millimetersToInches(double millimeters) {
     return millimeters / 25.4;
   }
 

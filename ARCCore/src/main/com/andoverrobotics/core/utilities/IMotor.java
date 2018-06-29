@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 public interface IMotor {
 
   /**
-   * Changes the power of the motor(s).
+   * Sets the power of the motor(s).
    *
    * @param power The new power
    */

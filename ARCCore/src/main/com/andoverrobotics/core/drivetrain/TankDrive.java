@@ -88,12 +88,6 @@ public class TankDrive extends DriveTrain {
         MotorPair.of(motorR1, motorR2), opMode, ticksPerInch, ticksPer360);
   }
 
-  /**
-   * Drive forward a certain amount with encoders.
-   *
-   * @param distanceInInches The distance to move forwards
-   * @param power The motor power
-   */
   @Override
   public void driveForwards(double distanceInInches, double power) {
     driveWithEncoder(Math.abs(distanceInInches), Math.abs(power));
@@ -117,23 +111,11 @@ public class TankDrive extends DriveTrain {
     runWithEncoder((int) robotTurn, (int) robotTurn, power, power);
   }
 
-  /**
-   * Drive backwards a certain amount with encoders.
-   *
-   * @param distanceInInches The distance to move backwards
-   * @param power The motor power
-   */
   @Override
   public void driveBackwards(double distanceInInches, double power) {
     driveWithEncoder(-Math.abs(distanceInInches), -Math.abs(power));
   }
 
-  /**
-   * Rotate a certain amount with encoders clockwise.
-   *
-   * @param degrees The desired clockwise rotation in degrees
-   * @param givenPower The motor power
-   */
   @Override
   public void rotateClockwise(int degrees, double givenPower) {
     double power = Range.clip(givenPower, -1, 1);
@@ -143,12 +125,6 @@ public class TankDrive extends DriveTrain {
     rotateWithEncoder(normalizedDegrees, -normalizedDegrees, power, -power);
   }
 
-  /**
-   * Rotate a certain amount with encoders counterclockwise.
-   *
-   * @param degrees The desired counterclockwise rotation in degrees
-   * @param givenPower The motor power
-   */
   @Override
   public void rotateCounterClockwise(int degrees, double givenPower) {
     double power = Range.clip(givenPower, -1, 1);
@@ -187,11 +163,6 @@ public class TankDrive extends DriveTrain {
 
   // -- TeleOp methods --
 
-  /**
-   * Set the power of the motors to move in a straight line without encoders.
-   *
-   * @param power The motor power to set, between -1 and 1, inclusive
-   */
   @Override
   public void setMovementPower(double power) {
     setMotorMode(RUN_WITHOUT_ENCODER);
@@ -200,11 +171,6 @@ public class TankDrive extends DriveTrain {
     motorR.setPower(power);
   }
 
-  /**
-   * Set the power of the motors to rotate without encoders.
-   *
-   * @param power The motor power to set, between -1 and 1, inclusive
-   */
   @Override
   public void setRotationPower(double power) { //clockwise if power is positive
     setMotorMode(RUN_WITHOUT_ENCODER);
@@ -213,12 +179,6 @@ public class TankDrive extends DriveTrain {
     motorR.setPower(-power);
   }
 
-  /**
-   * Set both the movement power and the rotation power of the the motors.
-   *
-   * @param movePower The motor power to set for movement, between -1 and 1, inclusive
-   * @param rotatePower The motor power to set for rotation, between -1 and 1, inclusive
-   */
   @Override
   public void setMovementAndRotation(double movePower, double rotatePower) {
     double leftPower = movePower + rotatePower,
