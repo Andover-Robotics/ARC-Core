@@ -69,8 +69,8 @@ public class TankDrive extends DriveTrain {
    * Creates a TankDrive from four DcMotors.
    *
    * @param motorL1 One of the left DcMotors
-   * @param motorR1 One of the right DcMotors
    * @param motorL2 The other left DcMotor
+   * @param motorR1 One of the right DcMotors
    * @param motorR2 The other right DcMotor
    * @param opMode The OpMode to set
    * @param ticksPerInch The number of encoder ticks required to cause a diagonal displacement of 1
