@@ -25,6 +25,9 @@ Thumbs.db
 build/
 
 # Uniform code style
-!.idea/codeStyles
+!.idea/codeStyles/*
 *ASUS_PC_01*
 
+.flooignore
+.floo
+gradle/wrapper/gradle-wrapper.properties

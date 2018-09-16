@@ -14,4 +14,8 @@ dependencies {
     compile project(':DogeCV')
     compile project(':openCVLibrary320')
     compile project(':FtcRobotController')
+    compile project(':ARCCore')
+}
+android {
+    buildToolsVersion '27.0.3'
 }
