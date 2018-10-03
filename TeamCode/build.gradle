@@ -11,10 +11,10 @@
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 dependencies {
-    implementation project(':DogeCV')
-    implementation project(':openCVLibrary320')
     implementation project(':FtcRobotController')
     implementation project(':ARCCore')
+    implementation project(':openCVLibrary3')
+    implementation project(':DogeCV')
 }
 android {
     buildToolsVersion '28.0.2'
