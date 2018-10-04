@@ -59,6 +59,11 @@ obj/
 
 # IntelliJ IDEA
 *.iml
+<<<<<<< HEAD
+.idea/*
+.gradle
+build/
+=======
 *.iws
 /out/
 
@@ -176,6 +181,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+>>>>>>> 391cf979453fa3dadabd15ff7e80a0ccd9a4d9e9
 
 
 # End of https://www.gitignore.io/api/macos,windows,androidstudio
