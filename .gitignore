@@ -62,6 +62,7 @@ obj/
 .idea/*
 .gradle
 build/
-
+!.idea/runConfigurations.xml
+!.idea/gradle.xml
 
 # End of https://www.gitignore.io/api/macos,windows,androidstudio
