@@ -24,10 +24,16 @@ public class ThunderGoldAlignDetector extends GoldAlignDetector {
     private boolean found = false;
     private double goldXPos = 0;
 
-    private Rect bestRect = null;
+    private Rect bestRect;
+
+    public ThunderGoldAlignDetector() {
+        super();
+        detectorName = "Thunder's Home-made All-natural Gold Align Detector";
+    }
 
     @Override
     public Mat process(Mat input) {
+        bestRect = null;
         if (input.channels() < 0 || input.cols() <= 0) {
             Log.e("DogeCV", "Bad INPUT MAT!");
 
@@ -81,7 +87,6 @@ public class ThunderGoldAlignDetector extends GoldAlignDetector {
                 aligned = false;
             }
             Imgproc.line(workingMat, new Point(xPos, getAdjustedSize().height), new Point(xPos, getAdjustedSize().height - 30), new Scalar(255, 255, 0), 2);
-            Imgproc.putText(workingMat, "Current X: " + bestRect.x, new Point(10, getAdjustedSize().height - 10), 0, 0.5, new Scalar(255, 255, 255), 1);
             found = true;
         } else {
             found = false;
@@ -101,7 +106,11 @@ public class ThunderGoldAlignDetector extends GoldAlignDetector {
     }
 
     public int getBestRectWidth() {
-        return bestRect.width;
+        return (bestRect == null) ? 0 : bestRect.width;
+    }
+
+    public int getYPosition() {
+        return (bestRect == null) ? 0 : bestRect.y;
     }
 
     @Override

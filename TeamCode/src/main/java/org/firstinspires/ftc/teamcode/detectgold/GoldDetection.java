@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends OpMode {
-    private final double CAM_FOCAL_LENGTH = 1.0, GOLD_WIDTH_IN = 2;
+    // Approximate focal length of a Moto G (2nd gen): 637.5
+    private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2;
     private ThunderGoldAlignDetector detector;
-
 
     @Override
     public void init() {
@@ -49,8 +49,8 @@ public class GoldDetection extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
-        telemetry.addData("X Pos", detector.getXPosition()); // Gold X pos.
-        telemetry.addData("Focal Length", calculateFocalLength(detector.getBestRectWidth(), 10));
+        telemetry.addData("Y Pos", detector.getYPosition()); // Gold X pos.
+        telemetry.addData("Distance", distanceFromGold(detector.getBestRectWidth()));
     }
 
     /*
@@ -61,11 +61,11 @@ public class GoldDetection extends OpMode {
         detector.disable();
     }
 
-    private double calculateFocalLength(int goldWithPX, int distanceFromObjIn){
+    private double calculateFocalLength(int goldWithPX, int distanceFromObjIn) {
         return goldWithPX * distanceFromObjIn / GOLD_WIDTH_IN;
     }
 
-    private double distanceFromGold(int goldWidthPX){
+    private double distanceFromGold(int goldWidthPX) {
         return GOLD_WIDTH_IN * CAM_FOCAL_LENGTH / goldWidthPX;
     }
 }
