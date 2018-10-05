@@ -2,21 +2,20 @@ package org.firstinspires.ftc.teamcode.detectgold;
 
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
-import com.disnodeteam.dogecv.detectors.roverruckus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends OpMode {
     private final double CAM_FOCAL_LENGTH = 1.0, GOLD_WIDTH_IN = 2;
-    private GoldAlignDetector detector;
+    private ThunderGoldAlignDetector detector;
 
 
     @Override
     public void init() {
         telemetry.addData("Status", "Gold Detection Test");
 
-        detector = new GoldAlignDetector();
+        detector = new ThunderGoldAlignDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
         detector.useDefaults();
 
@@ -51,6 +50,7 @@ public class GoldDetection extends OpMode {
     public void loop() {
         telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
         telemetry.addData("X Pos", detector.getXPosition()); // Gold X pos.
+        telemetry.addData("Focal Length", calculateFocalLength(detector.getBestRectWidth(), 10));
     }
 
     /*
@@ -61,7 +61,7 @@ public class GoldDetection extends OpMode {
         detector.disable();
     }
 
-    private double calculateFocalPoint(int goldWithPX, int distanceFromObjIn){
+    private double calculateFocalLength(int goldWithPX, int distanceFromObjIn){
         return goldWithPX * distanceFromObjIn / GOLD_WIDTH_IN;
     }
 
