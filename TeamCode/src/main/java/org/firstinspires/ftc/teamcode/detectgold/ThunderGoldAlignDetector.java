@@ -121,4 +121,8 @@ public class ThunderGoldAlignDetector extends GoldAlignDetector {
     public double getGoldXPos() {
         return goldXPos;
     }
+
+    public Size frameSize(){
+        return getAdjustedSize();
+    }
 }

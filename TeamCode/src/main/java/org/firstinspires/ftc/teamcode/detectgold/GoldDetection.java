@@ -16,7 +16,7 @@ public class GoldDetection extends OpMode {
         telemetry.addData("Status", "Gold Detection Test");
 
         detector = new ThunderGoldAlignDetector();
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0, false);
         detector.useDefaults();
 
         // Optional Tuning
@@ -48,9 +48,12 @@ public class GoldDetection extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
-        telemetry.addData("Y Pos", detector.getYPosition()); // Gold X pos.
-        telemetry.addData("Distance", distanceFromGold(detector.getBestRectWidth()));
+        telemetry.addData("Size:", detector.frameSize().width + " x " + detector.frameSize().height);
+        if (detector.isFound()) {
+            telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
+            telemetry.addData("Y Pos", detector.getYPosition()); // Gold X pos.
+            telemetry.addData("Distance", distanceFromGold(detector.getBestRectWidth()));
+        }
     }
 
     /*
