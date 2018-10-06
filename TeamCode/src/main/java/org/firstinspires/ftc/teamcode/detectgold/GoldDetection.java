@@ -5,14 +5,13 @@ import com.disnodeteam.dogecv.DogeCV;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-
 @TeleOp(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends OpMode {
     // Approximate focal length of a Moto G (2nd gen): 637.5
     private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2;
     private ThunderGoldAlignDetector detector;
+
+    //TODO: Setup DriveTrain to move the test bot
 
     @Override
     public void init() {
@@ -53,18 +52,26 @@ public class GoldDetection extends OpMode {
     @Override
     public void loop() {
         double perpendicularDistance = distanceFromGold(detector.getBestRectWidth());
-        if (detector.isFound() && !Double.isInfinite(perpendicularDistance)) {
-            double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth(), detector.getBestRect(), detector.frameSize().height);
-            telemetry.addData("Distance", perpendicularDistance);
-            telemetry.addData("Cube Dist", cubeDistance);
-            double angle = Math.toDegrees(Math.atan(cubeDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
-            double distanceToTravel = (int)(Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
+        if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
+            double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth());
 
-            if(Math.abs(angle) <= 2)
-                angle = 0; //Practically head on, no point turning
+            if (cubeDistance != Double.MAX_VALUE) {
+                double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
 
-            telemetry.addData("Angle", angle);
-            telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
+                double distanceToTravel = (int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
+
+                if (Math.abs(angle) <= 2)
+                    angle = 0; //Practically head on, no point turning
+
+                telemetry.addData("Distance", perpendicularDistance);
+                telemetry.addData("Cube Dist", cubeDistance);
+                telemetry.addData("Angle", angle);
+                telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
+
+                //TODO: Turn angle degrees to the right
+                //TODO: Drive distanceToTravel inches
+                //TODO: disable detector
+            }
         }
     }
 
@@ -84,8 +91,7 @@ public class GoldDetection extends OpMode {
         return GOLD_WIDTH_IN * CAM_FOCAL_LENGTH / goldWidthPX;
     }
 
-    private double cubeDistanceFromCenter(double goldWidthPX, Rect bestRect, double frameHeight) {
-        double distPx = frameHeight / 2 - (bestRect.tl().y + bestRect.height / 2); // Uses the y-coordinate and height because the phone is in landscape orientation
-        return GOLD_WIDTH_IN * distPx / goldWidthPX; //Solve the ratio
+    private double cubeDistanceFromCenter(double goldWidthPX) {
+            return GOLD_WIDTH_IN * detector.distanceToVerticalCenter() / goldWidthPX; //Solve the ratio
     }
 }
