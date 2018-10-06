@@ -113,6 +113,8 @@ public class ThunderGoldAlignDetector extends GoldAlignDetector {
         return (bestRect == null) ? 0 : bestRect.y;
     }
 
+    public Rect getBestRect(){return bestRect;}
+
     @Override
     public boolean isFound() {
         return found;
