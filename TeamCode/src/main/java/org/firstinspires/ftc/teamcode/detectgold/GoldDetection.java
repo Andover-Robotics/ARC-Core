@@ -1,17 +1,27 @@
 package org.firstinspires.ftc.teamcode.detectgold;
 
+import com.andoverrobotics.core.drivetrain.TankDrive;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.*;
 
 @TeleOp(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends OpMode {
+    private static final int ticksPerInch = 20, ticksPer360 = 200;
     // Approximate focal length of a Moto G (2nd gen): 637.5
+
     private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2;
     private ThunderGoldAlignDetector detector;
 
     //TODO: Setup DriveTrain to move the test bot
+    DcMotor motorL = hardwareMap.dcMotor.get("motorL");
+    DcMotor motorR = hardwareMap.dcMotor.get("motorR");
+    motorL.setDirection(Direction.REVERSE);
+
+    TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
 
     @Override
     public void init() {
@@ -59,6 +69,8 @@ public class GoldDetection extends OpMode {
                 double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
 
                 double distanceToTravel = (int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
+
+
 
                 if (Math.abs(angle) <= 2)
                     angle = 0; //Practically head on, no point turning
