@@ -68,9 +68,9 @@ public class GoldDetection extends OpMode {
                 telemetry.addData("Angle", angle);
                 telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
 
-                //TODO: Turn angle degrees to the right
+                //TODO: Turn angle degrees to the right or left
                 //TODO: Drive distanceToTravel inches
-                //TODO: disable detector
+                //TODO: disable detector using detector.disable()
             }
         }
     }
