@@ -17,32 +17,7 @@ public class GoldDetection extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
-        telemetry.addData("Status", "Gold Detection Test");
-
-        detector = new ThunderGoldAlignDetector();
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0, false);
-        detector.useDefaults();
-
-        // Optional Tuning
-        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
-        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
-        detector.downscale = 0.4; // How much to downscale the input frames
-
-        detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
-        //detector.perfectAreaScorer.perfectArea = 10000; // if using PERFECT_AREA scoring
-        detector.maxAreaScorer.weight = 0.005;
-
-        detector.ratioScorer.weight = 5;
-        detector.ratioScorer.perfectRatio = 1.0;
-
-        detector.enable();
-        motorR = hardwareMap.dcMotor.get("motorR");
-        motorL = hardwareMap.dcMotor.get("motorL");
-        motorL.setDirection(Direction.REVERSE);
-
-        tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
-
+        setup();
 
         double perpendicularDistance = distanceFromGold(detector.getBestRectWidth());
         if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
@@ -72,6 +47,34 @@ public class GoldDetection extends LinearOpMode {
                 detector.disable();
             }
         }
+    }
+
+    private void setup(){
+        telemetry.addData("Status", "Gold Detection Test");
+
+        detector = new ThunderGoldAlignDetector();
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0, false);
+        detector.useDefaults();
+
+        // Optional Tuning
+        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
+        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
+        detector.downscale = 0.4; // How much to downscale the input frames
+
+        detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
+        //detector.perfectAreaScorer.perfectArea = 10000; // if using PERFECT_AREA scoring
+        detector.maxAreaScorer.weight = 0.005;
+
+        detector.ratioScorer.weight = 5;
+        detector.ratioScorer.perfectRatio = 1.0;
+
+        detector.enable();
+
+        motorR = hardwareMap.dcMotor.get("motorR");
+        motorL = hardwareMap.dcMotor.get("motorL");
+        motorL.setDirection(Direction.REVERSE);
+
+        tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
     }
 
     private double calculateFocalLength(int goldWithPX, int distanceFromObjIn) {
