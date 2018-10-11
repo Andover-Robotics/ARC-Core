@@ -6,22 +6,15 @@ import com.disnodeteam.dogecv.DogeCV;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple.*;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @TeleOp(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends OpMode {
     private static final int ticksPerInch = 20, ticksPer360 = 200;
-    // Approximate focal length of a Moto G (2nd gen): 637.5
-
-    private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2;
+    private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2; // Approximate focal length of a Moto G (2nd gen): 637.5
     private ThunderGoldAlignDetector detector;
-
-    //TODO: Setup DriveTrain to move the test bot
-    DcMotor motorL = hardwareMap.dcMotor.get("motorL");
-    DcMotor motorR = hardwareMap.dcMotor.get("motorR");
-    motorL.setDirection(Direction.REVERSE);
-
-    TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
+    private DcMotor motorL, motorR;
+    private TankDrive tankDrive;
 
     @Override
     public void init() {
@@ -45,6 +38,11 @@ public class GoldDetection extends OpMode {
         detector.ratioScorer.perfectRatio = 1.0;
 
         detector.enable();
+        motorR = hardwareMap.dcMotor.get("motorR");
+        motorL = hardwareMap.dcMotor.get("motorL");
+        motorL.setDirection(Direction.REVERSE);
+
+        tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
     }
 
     @Override
@@ -71,7 +69,6 @@ public class GoldDetection extends OpMode {
                 double distanceToTravel = (int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
 
 
-
                 if (Math.abs(angle) <= 2)
                     angle = 0; //Practically head on, no point turning
 
@@ -80,9 +77,14 @@ public class GoldDetection extends OpMode {
                 telemetry.addData("Angle", angle);
                 telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
 
-                //TODO: Turn angle degrees to the right or left
-                //TODO: Drive distanceToTravel inches
-                //TODO: disable detector using detector.disable()
+                int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
+                tankDrive.rotateCounterClockwise(roundedAngle, 0.5); //Positive is counterclockwise, passing in a negative turns clockwise, so this works without any conditionals
+                tankDrive.driveForwards(distanceToTravel, 0.5);
+
+                //Go back to the stating position
+                tankDrive.driveBackwards(distanceToTravel, 0.5);
+                tankDrive.rotateClockwise(roundedAngle, 0.5);
+                detector.disable();
             }
         }
     }
@@ -92,7 +94,12 @@ public class GoldDetection extends OpMode {
      */
     @Override
     public void stop() {
-        detector.disable();
+        tankDrive.stop();
+        try {
+            detector.disable();
+        } catch (Exception e) {
+            // Do nothing, this should only happen if the detector has already been disabled
+        }
     }
 
     private double calculateFocalLength(int goldWithPX, int distanceFromObjIn) {
@@ -104,6 +111,6 @@ public class GoldDetection extends OpMode {
     }
 
     private double cubeDistanceFromCenter(double goldWidthPX) {
-            return GOLD_WIDTH_IN * detector.distanceToVerticalCenter() / goldWidthPX; //Solve the ratio
+        return GOLD_WIDTH_IN * detector.distanceToVerticalCenter() / goldWidthPX; //Solve the ratio
     }
 }
