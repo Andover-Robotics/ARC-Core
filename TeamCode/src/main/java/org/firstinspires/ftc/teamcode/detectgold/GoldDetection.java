@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode.detectgold;
 import com.andoverrobotics.core.drivetrain.TankDrive;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
-@TeleOp(name = "Gold Detection Test", group = "DogeCV")
-public class GoldDetection extends OpMode {
+@Autonomous(name = "Gold Detection Test", group = "DogeCV")
+public class GoldDetection extends LinearOpMode {
     private static final int ticksPerInch = 20, ticksPer360 = 200;
     private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2; // Approximate focal length of a Moto G (2nd gen): 637.5
     private ThunderGoldAlignDetector detector;
@@ -17,7 +16,7 @@ public class GoldDetection extends OpMode {
     private TankDrive tankDrive;
 
     @Override
-    public void init() {
+    public void runOpMode() {
 
         telemetry.addData("Status", "Gold Detection Test");
 
@@ -43,22 +42,8 @@ public class GoldDetection extends OpMode {
         motorL.setDirection(Direction.REVERSE);
 
         tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
-    }
 
-    @Override
-    public void init_loop() {
-    }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void loop() {
         double perpendicularDistance = distanceFromGold(detector.getBestRectWidth());
         if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
             double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth());
@@ -86,19 +71,6 @@ public class GoldDetection extends OpMode {
                 tankDrive.rotateClockwise(roundedAngle, 0.5);
                 detector.disable();
             }
-        }
-    }
-
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
-        tankDrive.stop();
-        try {
-            detector.disable();
-        } catch (Exception e) {
-            // Do nothing, this should only happen if the detector has already been disabled
         }
     }
 
