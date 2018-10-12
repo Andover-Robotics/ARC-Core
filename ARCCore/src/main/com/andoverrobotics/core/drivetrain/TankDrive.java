@@ -118,28 +118,28 @@ public class TankDrive extends DriveTrain {
 
     @Override
     public void rotateClockwise(int degrees, double givenPower) {
-        if (degrees < 0)
+        /*if (degrees < 0)
             rotateCounterClockwise(-degrees, givenPower);
-        else {
-            double power = Range.clip(givenPower, -1, 1);
-            power = Math.abs(power);
-            double normalizedDegrees = Converter.normalizedDegrees(degrees);
+        else {*/
+        double power = Range.clip(givenPower, -1, 1);
+        power = Math.abs(power);
+        double normalizedDegrees = Converter.normalizedDegrees(degrees);
 
-            rotateWithEncoder(normalizedDegrees, -normalizedDegrees, power, -power);
-        }
+        rotateWithEncoder(normalizedDegrees, -normalizedDegrees, power, -power);
+        /*}*/
     }
 
     @Override
     public void rotateCounterClockwise(int degrees, double givenPower) {
-        if (degrees < 0)
+        /*if (degrees < 0)
             rotateClockwise(-degrees, givenPower);
-        else {
-            double power = Range.clip(givenPower, -1, 1);
-            power = Math.abs(power);
-            double normalizedDegrees = Converter.normalizedDegrees(degrees);
+        else {*/
+        double power = Range.clip(givenPower, -1, 1);
+        power = Math.abs(power);
+        double normalizedDegrees = Converter.normalizedDegrees(degrees);
 
-            rotateWithEncoder(-normalizedDegrees, normalizedDegrees, -power, power);
-        }
+        rotateWithEncoder(-normalizedDegrees, normalizedDegrees, -power, power);
+        /*}*/
     }
 
     private void rotateWithEncoder(double leftDegrees, double rightDegrees,
@@ -159,8 +159,8 @@ public class TankDrive extends DriveTrain {
         String.format("leftTickOffset=%d rightTickOffset=%d leftPower=%.3f rightPower=%.3f",
         leftTickOffset, rightTickOffset, leftPower, rightPower));*/
 
-        motorL.startRunToPosition(leftTickOffset, leftPower);
-        motorR.startRunToPosition(rightTickOffset, rightPower);
+        motorL.startRunToPosition(leftTickOffset, Math.abs(leftPower));
+        motorR.startRunToPosition(rightTickOffset, Math.abs(rightPower));
 
         while (isBusy() && opModeIsActive()) {
         }

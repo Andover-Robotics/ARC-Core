@@ -19,37 +19,43 @@ public class GoldDetection extends LinearOpMode {
     public void runOpMode() {
         setup();
 
-        double perpendicularDistance = distanceFromGold(detector.getBestRectWidth());
-        if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
-            double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth());
+        while (opModeIsActive()) {
+            double perpendicularDistance = distanceFromGold(detector.getBestRectWidth());
+            if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
+                double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth());
 
-            if (cubeDistance != Double.MAX_VALUE) {
-                double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
+                if (cubeDistance != Double.MAX_VALUE) {
+                    double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
 
-                double distanceToTravel = (int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
+                    double distanceToTravel = (int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
 
 
-                if (Math.abs(angle) <= 2)
-                    angle = 0; //Practically head on, no point turning
+                    if (Math.abs(angle) <= 2)
+                        angle = 0; //Practically head on, no point turning
 
-                telemetry.addData("Distance", perpendicularDistance);
-                telemetry.addData("Cube Dist", cubeDistance);
-                telemetry.addData("Angle", angle);
-                telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
+                    telemetry.addData("Distance", perpendicularDistance);
+                    telemetry.addData("Cube Dist", cubeDistance);
+                    telemetry.addData("Angle", angle);
+                    telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
+                    telemetry.update();
 
-                int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
-                tankDrive.rotateCounterClockwise(roundedAngle, 0.5); //Positive is counterclockwise, passing in a negative turns clockwise, so this works without any conditionals
-                tankDrive.driveForwards(distanceToTravel, 0.5);
+                    int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
+                    tankDrive.rotateCounterClockwise(roundedAngle, 0.5); //Positive is counterclockwise, passing in a negative turns clockwise, so this works without any conditionals
+                    tankDrive.driveForwards(distanceToTravel, 0.5);
 
-                //Go back to the stating position
-                tankDrive.driveBackwards(distanceToTravel, 0.5);
-                tankDrive.rotateClockwise(roundedAngle, 0.5);
-                detector.disable();
+                    //Go back to the stating position
+                    tankDrive.driveBackwards(distanceToTravel, 0.5);
+                    tankDrive.rotateClockwise(roundedAngle, 0.5);
+                    detector.disable();
+                 }
+
+                 if(cubeDistance < 2)
+                     break;
             }
         }
     }
 
-    private void setup(){
+    private void setup() {
         telemetry.addData("Status", "Gold Detection Test");
 
         detector = new ThunderGoldAlignDetector();
@@ -74,7 +80,13 @@ public class GoldDetection extends LinearOpMode {
         motorL = hardwareMap.dcMotor.get("motorL");
         motorL.setDirection(Direction.REVERSE);
 
+        motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
         tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
+
+        waitForStart();
     }
 
     private double calculateFocalLength(int goldWithPX, int distanceFromObjIn) {
