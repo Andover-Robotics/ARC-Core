@@ -17,5 +17,5 @@ dependencies {
     implementation project(':DogeCV')
 }
 android {
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 }
