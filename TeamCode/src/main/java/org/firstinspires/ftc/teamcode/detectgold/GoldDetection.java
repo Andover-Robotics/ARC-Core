@@ -9,7 +9,18 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @Autonomous(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends LinearOpMode {
-    private static final int ticksPerInch = 20, ticksPer360 = 200;
+    //The distance between the front wheels, the back wheels, and the front and the back wheels, in inches. Currently unset because measuring is hard.
+    private static final double FRONT_WHEEL_DISTANCE = 0, BACK_WHEEL_DISTANCE = 0, FRONT_BACK_DISTANCE = 0;
+
+    //TICKS_PER_WHEEL_360: how many ticks of a motor to make a wheel turn 360
+    //ticksPer360: how many encoder ticks required to cause a full rotation for the robot, when this amount is applied to the left and right motors in opposite directions
+    //ticksPer360 is currently calculated by multiplying ticksPerInch by the circumference of the circle with the rear axle as a diameter, as those are the wheels that are moving
+    //ticksPerInch and ticksPer360 are rounded to the nearest integer
+    private static final int WHEEL_DIAMETER_IN = 4, TICKS_PER_WHEEL_360 = 1440, ticksPerInch = (int)(TICKS_PER_WHEEL_360 / (Math.PI * WHEEL_DIAMETER_IN) + 0.5), ticksPer360 = (int)(Math.PI * BACK_WHEEL_DISTANCE / ticksPerInch + 0.5);
+    // KNOWN MOTOR TICKS (TICKS_PER_WHEEL_360):
+    //     Tetrix DC Motors: 1440
+    //     AndyMark NeveRest Motors: 1120 (Not 100% sure)
+
     private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2; // Approximate focal length of a Moto G (2nd gen): 637.5
     private ThunderGoldAlignDetector detector;
     private DcMotor motorL, motorR;
