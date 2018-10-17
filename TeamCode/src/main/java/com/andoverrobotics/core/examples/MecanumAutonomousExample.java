@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 public class MecanumAutonomousExample extends LinearOpMode {
 
   // Change these values if necessary
-  private static final int ticksPerInch = (int) (1120 / (4 * Math.PI)),
-      ticksPer360 = 4000;
+  private static final int TICKS_PER_INCH = (int) (1120 / (4 * Math.PI)), TICKS_PER_360 = 4000;
 
   @Override
   public void runOpMode() {
@@ -25,7 +24,7 @@ public class MecanumAutonomousExample extends LinearOpMode {
     motorBL.setDirection(Direction.REVERSE);
 
     MecanumDrive drivetrain = MecanumDrive.fromOctagonalMotors(
-        motorFL, motorFR, motorBL, motorBR, this, ticksPerInch, ticksPer360);
+        motorFL, motorFR, motorBL, motorBR, this, TICKS_PER_INCH, TICKS_PER_360);
 
     waitForStart();
 
