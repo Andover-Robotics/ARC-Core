@@ -26,9 +26,9 @@ public interface IMotor {
    *
    * @param tickOffset The number of ticks to travel, which specifies the direction and distance of
    * travel
-   * @param absPower The absolute value of the power to assign to the motors
+   * @param power The power to assign to the motors
    */
-  void startRunToPosition(int tickOffset, double absPower);
+  void startRunToPosition(int tickOffset, double power);
 
   /**
    * Sets the {@link com.qualcomm.robotcore.hardware.DcMotor.RunMode} of the motor(s).

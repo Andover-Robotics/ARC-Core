@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 @Autonomous(name = "TankDrive Autonomous Example", group = "ARC")
 public class TankDriveAutonomousExample extends LinearOpMode {
 
-    private static final int ticksPer360 = 8000, ticksPerInch = 20;
+  private static final int TICKS_PER_INCH = 1000, TICKS_PER_360 = 1440 * 4;
 
     @Override
     public void runOpMode() {
@@ -18,8 +18,9 @@ public class TankDriveAutonomousExample extends LinearOpMode {
         DcMotor motorR = hardwareMap.dcMotor.get("motorR");
         motorL.setDirection(Direction.REVERSE);
 
-        motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
+
 
         TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
 
