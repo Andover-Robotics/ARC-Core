@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 @TeleOp(name = "Mecanum TeleOp Example", group = "ARC")
 public class MecanumTeleOpExample extends OpMode {
 
-  private static final int TICKS_PER_INCH = 20, TICKS_PER_360 = 200;
+  private static final int TICKS_PER_INCH = (int) (1120 / (4 * Math.PI)), TICKS_PER_360 = 4000;
 
   private MecanumDrive mecanumDrive;
 
