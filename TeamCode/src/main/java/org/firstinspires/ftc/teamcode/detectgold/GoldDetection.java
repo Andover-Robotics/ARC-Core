@@ -16,7 +16,7 @@ public class GoldDetection extends LinearOpMode {
     //ticksPer360: how many encoder ticks required to cause a full rotation for the robot, when this amount is applied to the left and right motors in opposite directions
     //ticksPer360 is currently calculated by multiplying ticksPerInch by the circumference of the circle with the rear axle as a diameter, as those are the wheels that are moving
     //ticksPerInch and ticksPer360 are rounded to the nearest integer
-    private static final int WHEEL_DIAMETER_IN = 4, TICKS_PER_WHEEL_360 = 1440, ticksPerInch = (int)(TICKS_PER_WHEEL_360 / (Math.PI * WHEEL_DIAMETER_IN) + 0.5), ticksPer360 = (int)(Math.PI * BACK_WHEEL_DISTANCE / ticksPerInch + 0.5);
+    private static final int WHEEL_DIAMETER_IN = 4, TICKS_PER_WHEEL = 1440, TICKS_PER_INCH = (int)(TICKS_PER_WHEEL / (Math.PI * WHEEL_DIAMETER_IN) + 0.5), TICKS_PER_360 = (int)(TICKS_PER_INCH * Math.PI * 10.55 + 0.5);
     // KNOWN MOTOR TICKS (TICKS_PER_WHEEL_360):
     //     Tetrix DC Motors: 1440
     //     AndyMark NeveRest Motors: 1120 (Not 100% sure)
@@ -38,25 +38,37 @@ public class GoldDetection extends LinearOpMode {
                 if (cubeDistance != Double.MAX_VALUE) {
                     double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
 
-                    double distanceToTravel = (int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 0.99); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
-
+                    double distanceToTravel = (int)(Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2)) + 2.5); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
 
                     if (Math.abs(angle) <= 2)
                         angle = 0; //Practically head on, no point turning
 
+                    int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
+
                     telemetry.addData("Distance", perpendicularDistance);
                     telemetry.addData("Cube Dist", cubeDistance);
                     telemetry.addData("Angle", angle);
+                    telemetry.addData("Rounded Angle", roundedAngle);
                     telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
                     telemetry.update();
 
-                    int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
-                    tankDrive.rotateCounterClockwise(roundedAngle, 0.5); //Positive is counterclockwise, passing in a negative turns clockwise, so this works without any conditionals
-                    tankDrive.driveForwards(distanceToTravel, 0.5);
+                    if(roundedAngle < 0){
+                        tankDrive.rotateClockwise(-roundedAngle, 0.5); //Positive is counterclockwise, passing in a negative turns clockwise, so this works without any conditionals
+                        tankDrive.driveForwards(distanceToTravel, 0.5);
 
-                    //Go back to the stating position
-                    tankDrive.driveBackwards(distanceToTravel, 0.5);
-                    tankDrive.rotateClockwise(roundedAngle, 0.5);
+                        //Go back to the stating position
+                        tankDrive.driveBackwards(distanceToTravel, 0.5);
+                        tankDrive.rotateCounterClockwise(-roundedAngle, 0.5);
+
+                    }
+                    else {
+                        tankDrive.rotateCounterClockwise(roundedAngle, 0.5); //Positive is counterclockwise, passing in a negative turns clockwise, so this works without any conditionals
+                        tankDrive.driveForwards(distanceToTravel, 0.5);
+
+                        //Go back to the stating position
+                        tankDrive.driveBackwards(distanceToTravel, 0.5);
+                        tankDrive.rotateClockwise(roundedAngle, 0.5);
+                    }
                     detector.disable();
                  }
 
@@ -95,7 +107,7 @@ public class GoldDetection extends LinearOpMode {
         motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
+        tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
 
         waitForStart();
     }
