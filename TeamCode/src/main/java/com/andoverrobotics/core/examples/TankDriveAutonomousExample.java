@@ -9,7 +9,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 @Autonomous(name = "TankDrive Autonomous Example", group = "ARC")
 public class TankDriveAutonomousExample extends LinearOpMode {
 
-  private static final int TICKS_PER_INCH = 1000, TICKS_PER_360 = 1440 * 4;
+  private static final int WHEEL_DIAMETER_IN = 4, TICKS_PER_WHEEL = 1440,
+          TICKS_PER_INCH = (int)(TICKS_PER_WHEEL / (Math.PI * WHEEL_DIAMETER_IN) + 0.5),
+          TICKS_PER_360 = (int)(TICKS_PER_INCH * Math.PI * 10.55 + 0.5);
+
 
     @Override
     public void runOpMode() {
