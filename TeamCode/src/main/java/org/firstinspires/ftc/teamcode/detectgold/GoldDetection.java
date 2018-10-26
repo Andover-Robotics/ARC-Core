@@ -3,14 +3,16 @@ package org.firstinspires.ftc.teamcode.detectgold;
 import com.andoverrobotics.core.drivetrain.TankDrive;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
+import com.disnodeteam.dogecv.Dogeforia;
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 @Autonomous(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends LinearOpMode {
     //The distance between the front wheels, the back wheels, and the front and the back wheels, in inches. Currently unset because measuring is hard.
-    private static final double FRONT_WHEEL_DISTANCE = 0, BACK_WHEEL_DISTANCE = 0, FRONT_BACK_DISTANCE = 0;
+    private static final double FRONT_WHEEL_DISTANCE = 14.8, BACK_WHEEL_DISTANCE = 14.8, FRONT_BACK_DISTANCE = 12.25;
 
     //TICKS_PER_WHEEL_360: how many ticks of a motor to make a wheel turn 360
     //ticksPer360: how many encoder ticks required to cause a full rotation for the robot, when this amount is applied to the left and right motors in opposite directions
@@ -22,7 +24,16 @@ public class GoldDetection extends LinearOpMode {
     //     AndyMark NeveRest Motors: 1120 (Not 100% sure)
 
     private final double CAM_FOCAL_LENGTH = 751.0, GOLD_WIDTH_IN = 2; // Approximate focal length of a Moto G (2nd gen): 637.5
+
+    // last year's Vuforia key
+    private final String VUFORIA_KEY = "AQRacK7/////AAAAGea1bsBsYEJvq6S3KuXK4PYTz4IZmGA7SV88bdM7l26beSEWkZTUb8H352Bo/ZMC6krwmfEuXiK7d7qdFkeBt8BaD0TZAYBMwHoBkb7IBgMuDF4fnx2KiQPOvwBdsIYSIFjiJgGlSj8pKZI+M5qiLb3DG3Ty884EmsqWQY0gjd6RNhtSR+6oiXazLhezm9msyHWZtX5hQFd9XoG5npm4HoGaZNdB3g5YCAQNHipjTm3Vkf71rG/Fffif8UTCI1frmKYtb4RvqiixDSPrD6OG6YmbsPOYUt2RZ6sSTreMzVL76CNfBTzmpo2V0E6KKP2y9N19hAum3GZu3G/1GEB5D+ckL/CXk4JM66sJw3PGucCs";
+
     private ThunderGoldAlignDetector detector;
+
+    private Dogeforia vuforia;
+
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = VuforiaLocalizer.CameraDirection.FRONT;
+
     private DcMotor motorL, motorR;
     private TankDrive tankDrive;
 
@@ -81,8 +92,21 @@ public class GoldDetection extends LinearOpMode {
     private void setup() {
         telemetry.addData("Status", "Gold Detection Test");
 
+        //int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        Dogeforia.Parameters parameters = new Dogeforia.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+
+        parameters.fillCameraMonitorViewParent = true;
+
+        vuforia = new Dogeforia(parameters);
+
+        vuforia.enableConvertFrameToBitmap();
+
         detector = new ThunderGoldAlignDetector();
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0, false);
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 1, true);
         detector.useDefaults();
 
         // Optional Tuning
@@ -97,7 +121,10 @@ public class GoldDetection extends LinearOpMode {
         detector.ratioScorer.weight = 5;
         detector.ratioScorer.perfectRatio = 1.0;
 
-        detector.enable();
+        vuforia.setDogeCVDetector(detector);
+        vuforia.enableDogeCV();
+        //vuforia.showDebug(); Don't enable this since it causes a crash
+        vuforia.start();
 
         motorR = hardwareMap.dcMotor.get("motorR");
         motorL = hardwareMap.dcMotor.get("motorL");
@@ -123,4 +150,5 @@ public class GoldDetection extends LinearOpMode {
     private double cubeDistanceFromCenter(double goldWidthPX) {
         return GOLD_WIDTH_IN * detector.distanceToVerticalCenter() / goldWidthPX; //Solve the ratio
     }
+
 }
