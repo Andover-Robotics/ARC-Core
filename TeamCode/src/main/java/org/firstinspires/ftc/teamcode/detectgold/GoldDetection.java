@@ -7,6 +7,8 @@ import com.disnodeteam.dogecv.Dogeforia;
 import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.vuforia.CameraDevice;
+
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 @Autonomous(name = "Gold Detection Test", group = "DogeCV")
@@ -81,6 +83,7 @@ public class GoldDetection extends LinearOpMode {
                         tankDrive.rotateClockwise(roundedAngle, 0.5);
                     }
                     detector.disable();
+                    vuforia.stop();
                  }
 
                  if(cubeDistance < 2)
@@ -121,10 +124,15 @@ public class GoldDetection extends LinearOpMode {
         detector.ratioScorer.weight = 5;
         detector.ratioScorer.perfectRatio = 1.0;
 
+        //CameraDevice.getInstance().init(CameraDevice.CAMERA_DIRECTION.CAMERA_DIRECTION_FRONT);
+        CameraDevice.getInstance().setFlashTorchMode(true);
+
         vuforia.setDogeCVDetector(detector);
         vuforia.enableDogeCV();
-        //vuforia.showDebug(); Don't enable this since it causes a crash
+        //vuforia.showDebug(); //Don't enable this since it causes a crash
         vuforia.start();
+
+
 
         motorR = hardwareMap.dcMotor.get("motorR");
         motorL = hardwareMap.dcMotor.get("motorL");
@@ -132,7 +140,6 @@ public class GoldDetection extends LinearOpMode {
 
         motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
 
