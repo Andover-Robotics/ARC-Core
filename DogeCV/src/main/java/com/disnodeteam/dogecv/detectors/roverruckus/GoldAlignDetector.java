@@ -35,7 +35,6 @@ public class GoldAlignDetector extends DogeCVDetector {
     private Size stretchKernal = new Size(10,10);
     private Size newSize = new Size();
 
-
     private boolean found = false;
     private boolean aligned = false;
     private double goldXPos = 0;
