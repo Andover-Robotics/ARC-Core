@@ -67,8 +67,10 @@ public class MainTeleOp extends OpMode {
             servoBucketR.setPosition(0);
         }
 
-        telemetry.addData("Left stick X", gamepad1.left_stick_x);
-        telemetry.addData("Left stick Y", -gamepad1.left_stick_y);
+        telemetry.addData("servoBucket Position:", servoBucketL.getPosition());
+        telemetry.addData("motorLift Power:", motorLift.getPower());
+        telemetry.addData("motorIntake Power:", motorIntakeL.getPower());
+
         telemetry.update();
     }
 }
