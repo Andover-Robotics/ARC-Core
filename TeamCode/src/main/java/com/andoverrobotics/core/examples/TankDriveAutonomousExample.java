@@ -14,25 +14,29 @@ public class TankDriveAutonomousExample extends LinearOpMode {
           TICKS_PER_360 = (int)(TICKS_PER_INCH * Math.PI * 10.55 + 0.5);
 
 
-  @Override
-  public void runOpMode() {
+    @Override
+    public void runOpMode() {
 
-    DcMotor motorL = hardwareMap.dcMotor.get("motorL");
-    DcMotor motorR = hardwareMap.dcMotor.get("motorR");
-    motorL.setDirection(Direction.REVERSE);
+        DcMotor motorL = hardwareMap.dcMotor.get("motorL");
+        DcMotor motorR = hardwareMap.dcMotor.get("motorR");
+        motorL.setDirection(Direction.REVERSE);
 
-    TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
 
-    waitForStart();
+        TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
 
-    for (int i = 0; i < 4; i++) {
-      tankDrive.driveForwards(36, 1);
-      telemetry.addLine("Traveled 36 inches");
-      telemetry.update();
 
-      tankDrive.rotateClockwise(90, 1);
-      telemetry.addLine("Turned 90 degrees clockwise");
-      telemetry.update();
+        TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
+
+        waitForStart();
+
+        for (int i = 0; i < 4; i++) {
+            tankDrive.driveForwards(36, 0.25);
+            telemetry.addLine("Traveled 36 inches");
+            telemetry.update();
+
+            tankDrive.rotateClockwise(90, 0.25);
+            telemetry.addLine("Turned 90 degrees clockwise");
+            telemetry.update();
+        }
     }
-  }
 }
