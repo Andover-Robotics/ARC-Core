@@ -21,11 +21,7 @@ public class TankDriveAutonomousExample extends LinearOpMode {
         DcMotor motorR = hardwareMap.dcMotor.get("motorR");
         motorL.setDirection(Direction.REVERSE);
 
-
         TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
-
-
-        TankDrive tankDrive = TankDrive.fromMotors(motorL, motorR, this, ticksPerInch, ticksPer360);
 
         waitForStart();
 
