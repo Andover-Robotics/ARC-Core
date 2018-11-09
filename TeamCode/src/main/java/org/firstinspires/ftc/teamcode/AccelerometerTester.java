@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.detectgold;
+package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.detectgold.Accelerometer.PhoneRotation;
+import org.firstinspires.ftc.teamcode.Accelerometer.PhoneRotation;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name = "Accelerometer Tester")
+@Autonomous(name = "Test Accelerometer")
 public class AccelerometerTester extends LinearOpMode {
 
 

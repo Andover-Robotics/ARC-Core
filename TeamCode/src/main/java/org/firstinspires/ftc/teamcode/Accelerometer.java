@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.detectgold;
+package org.firstinspires.ftc.teamcode;
 
 
 import android.content.Context;
@@ -71,16 +71,10 @@ public class Accelerometer implements SensorEventListener {
 
         if (maxReading >= 0) {
             // Either up or left
-            if (maxReadingIndex == 0)
-                return PhoneRotation.UP;
-            else
-                return PhoneRotation.LEFT;
+            return (maxReadingIndex == 0) ? PhoneRotation.LEFT : PhoneRotation.UP;
         } else {
             // Either down or right
-            if (maxReadingIndex == 0)
-                return PhoneRotation.DOWN;
-            else
-                return PhoneRotation.RIGHT;
+            return (maxReadingIndex == 0) ? PhoneRotation.RIGHT : PhoneRotation.DOWN;
         }
     }
 

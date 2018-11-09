@@ -9,12 +9,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.vuforia.CameraDevice;
 
+import org.firstinspires.ftc.robotcore.external.Predicate;
+import org.firstinspires.ftc.robotcore.external.Supplier;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Accelerometer;
+import org.firstinspires.ftc.teamcode.InterruptableTankDrive;
 
 @Autonomous(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends LinearOpMode {
     //The distance between the front wheels, the back wheels, and the front and the back wheels, in inches. Currently unset because measuring is hard.
-    private static final double FRONT_WHEEL_DISTANCE = 14.8, BACK_WHEEL_DISTANCE = 14.8, FRONT_BACK_DISTANCE = 12.25, ROBOT_DIAMETER = 2 * Math.sqrt(Math.pow(1/2 * (FRONT_WHEEL_DISTANCE + BACK_WHEEL_DISTANCE) / 2, 2) + Math.pow(1/2 * FRONT_BACK_DISTANCE, 2));;
+    private static final double FRONT_WHEEL_DISTANCE = 14.8, BACK_WHEEL_DISTANCE = 14.8, FRONT_BACK_DISTANCE = 12.25, ROBOT_DIAMETER = 2 * Math.sqrt(Math.pow(1 / 2 * (FRONT_WHEEL_DISTANCE + BACK_WHEEL_DISTANCE) / 2, 2) + Math.pow(1 / 2 * FRONT_BACK_DISTANCE, 2));
 
     //TICKS_PER_WHEEL_360: how many ticks of a motor to make a wheel turn 360
     //ticksPer360: how many encoder ticks required to cause a full rotation for the robot, when this amount is applied to the left and right motors in opposite directions
@@ -39,46 +43,70 @@ public class GoldDetection extends LinearOpMode {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = VuforiaLocalizer.CameraDirection.BACK;
 
     private DcMotor motorL, motorR;
-    private TankDrive tankDrive;
+    private InterruptableTankDrive tankDrive;
+    private Accelerometer accelerometer;
 
     @Override
     public void runOpMode() {
         setup();
 
         while (opModeIsActive()) {
+
+            Supplier<Boolean> checkForGoldDetection = new Supplier<Boolean>() {
+                @Override
+                public Boolean get() {
+                    return detector.isFound() && !Double.isInfinite(distanceFromGold(detector.getBestRectWidth())) && !detector.bestRectIsNull();
+                }
+            };
+
             double perpendicularDistance = distanceFromGold(detector.getBestRectWidth());
-            if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
-                double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth());
+            boolean firstRotation = true;
 
-                double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
+            while (!detector.isFound() || Double.isInfinite(perpendicularDistance) || detector.bestRectIsNull()) {
+                tankDrive.rotateClockwise((firstRotation) ? 22 : 44, 0.5, checkForGoldDetection);
+                tankDrive.rotateCounterClockwise(44, 0.5, checkForGoldDetection);
 
-                double distanceToTravel = Math.min((int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2))), MAX_TRAVEL); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
-                //In case the phone reads a huge distance, it will reduce it to sqrt(24^2 + 24^2)
-                if (Math.abs(angle) <= 2)
-                    angle = 0; //Practically head on, no point turning
-
-                int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
-
-                telemetry.addData("Distance", perpendicularDistance);
-                telemetry.addData("Cube Dist", cubeDistance);
-                telemetry.addData("Angle", angle);
-                telemetry.addData("Rounded Angle", roundedAngle);
-                telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
-                telemetry.update();
-
-                tankDrive.rotateClockwise(roundedAngle, 0.5);
-                tankDrive.driveForwards(distanceToTravel, 0.5);
-
-                tankDrive.driveBackwards(distanceToTravel, 0.5);
-                tankDrive.rotateClockwise(-roundedAngle, 0.5);
-
-                detector.disable();
-                vuforia.stop();
-
-                stop();
+                firstRotation = false;
             }
+
+
+            double cubeDistance = cubeDistanceFromCenter(detector.getBestRectWidth());
+
+            double angle = Math.toDegrees(Math.atan(cubeDistance / perpendicularDistance)); // The angle to turn, in degrees. Negative = clockwise, positive = counterclockwise
+
+            double distanceToTravel = Math.min((int) (Math.sqrt(Math.pow(perpendicularDistance, 2) + Math.pow(cubeDistance, 2))), MAX_TRAVEL); //Use the pythagorean theorem to calculate the length of the hypotenuse. Always rounds up to an integer to ensure that the robot will reach the gold every time
+            //In case the phone reads a huge distance, it will reduce it to sqrt(24^2 + 24^2)
+            if (Math.abs(angle) <= 2)
+                angle = 0; //Practically head on, no point turning
+
+            Accelerometer.PhoneRotation rotation = accelerometer.getPhoneRotation();
+
+            int roundedAngle = (angle >= 0) ? (int) (angle + 0.5) : (int) (angle - 0.5); //Round to the nearest integer
+
+            roundedAngle *= (rotation == Accelerometer.PhoneRotation.UP) ? -1 : 1;
+
+            telemetry.addData("Distance", perpendicularDistance);
+            telemetry.addData("Cube Dist", cubeDistance);
+            telemetry.addData("Angle", angle);
+            telemetry.addData("Rounded Angle", roundedAngle);
+            telemetry.addData("Hypotenuse (Rounded)", distanceToTravel);
+            telemetry.addData("Phone Orientation", rotation);
+            telemetry.update();
+
+            tankDrive.rotateClockwise(roundedAngle, 0.5);
+            tankDrive.driveForwards(distanceToTravel, 0.5);
+
+            tankDrive.driveBackwards(distanceToTravel, 0.5);
+            tankDrive.rotateClockwise(-roundedAngle, 0.5);
+
+            detector.disable();
+            vuforia.stop();
+            accelerometer.stop();
+
+            stop();
         }
     }
+
 
     private void setup() {
         telemetry.addData("Status", "Gold Detection Test");
@@ -127,7 +155,9 @@ public class GoldDetection extends LinearOpMode {
         motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        tankDrive = TankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
+        tankDrive = InterruptableTankDrive.fromMotors(motorL, motorR, this, TICKS_PER_INCH, TICKS_PER_360);
+
+        accelerometer = new Accelerometer(hardwareMap);
 
         waitForStart();
     }

@@ -129,6 +129,6 @@ public class ThunderGoldAlignDetector extends GoldAlignDetector {
         Point centerPoint = new Point(goldXPos, getAdjustedSize().height / 2);
         double dist = distance(centerOfCircle, centerPoint);
         // If centerOfCircle is to the left of centerPoint, it's positive, otherwise its negative
-        return (centerOfCircle.y < centerPoint.y) ? -dist : dist; //Use y instead of x, because the phone is in landscape orientation
+        return (centerOfCircle.y < centerPoint.y) ? -dist : dist; // Use y instead of x, because the phone is in landscape orientation
     }
 }
