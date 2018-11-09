@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 @Autonomous(name = "Gold Detection Test", group = "DogeCV")
 public class GoldDetection extends LinearOpMode {
     //The distance between the front wheels, the back wheels, and the front and the back wheels, in inches. Currently unset because measuring is hard.
-    private static final double FRONT_WHEEL_DISTANCE = 14.8, BACK_WHEEL_DISTANCE = 14.8, FRONT_BACK_DISTANCE = 12.25;
+    private static final double FRONT_WHEEL_DISTANCE = 14.8, BACK_WHEEL_DISTANCE = 14.8, FRONT_BACK_DISTANCE = 12.25, ROBOT_DIAMETER = 2 * Math.sqrt(Math.pow(1/2 * (FRONT_WHEEL_DISTANCE + BACK_WHEEL_DISTANCE) / 2, 2) + Math.pow(1/2 * FRONT_BACK_DISTANCE, 2));;
 
     //TICKS_PER_WHEEL_360: how many ticks of a motor to make a wheel turn 360
     //ticksPer360: how many encoder ticks required to cause a full rotation for the robot, when this amount is applied to the left and right motors in opposite directions
