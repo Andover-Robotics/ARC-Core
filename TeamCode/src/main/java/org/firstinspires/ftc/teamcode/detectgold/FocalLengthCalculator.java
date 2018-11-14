@@ -58,7 +58,7 @@ public class FocalLengthCalculator extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double perpendicularDistance = 6;
+            double perpendicularDistance = 12;
             if (detector.isFound() && !Double.isInfinite(perpendicularDistance) && !detector.bestRectIsNull()) {
                 telemetry.addData("Focal Length", calculateFocalLength(detector.getBestRectWidth(), perpendicularDistance));
                 telemetry.update();
