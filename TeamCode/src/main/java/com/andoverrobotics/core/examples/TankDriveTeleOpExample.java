@@ -28,7 +28,7 @@ public class TankDriveTeleOpExample extends OpMode {
     tankDrive.setMovementAndRotation(-gamepad1.left_stick_y, gamepad1.left_stick_x); // if push movement forward then moter goes back
 
     telemetry.addData("Left stick X", gamepad1.left_stick_x); // y is up and down and x is left and right
-    telemetry.addData("Left stick Y", -gamepad1.left_stick_y);
+    telemetry.addData("Left stick Y", gamepad1.left_stick_y);
     telemetry.update();
   }
 }
