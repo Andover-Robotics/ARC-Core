@@ -57,19 +57,19 @@ public class TankDriveTest {
   @Test
   public void driveBackwards() {
     driveTrain.driveBackwards(5, 0.7);
-    verifyDrivenDisplacementWithPower(-5, -0.7);
+    verifyDrivenDisplacementWithPower(-5, 0.7);
   }
 
   @Test
   public void driveBackwardsWithNegativeDistance() {
     driveTrain.driveBackwards(-5, 0.7);
-    verifyDrivenDisplacementWithPower(-5, -0.7);
+    verifyDrivenDisplacementWithPower(-5, 0.7);
   }
 
   @Test
   public void driveBackwardsWithNegativePower() {
     driveTrain.driveBackwards(5, -0.7);
-    verifyDrivenDisplacementWithPower(-5, -0.7);
+    verifyDrivenDisplacementWithPower(-5, 0.7);
   }
 
   @Test
@@ -82,42 +82,42 @@ public class TankDriveTest {
   public void rotateClockwise() {
     driveTrain.rotateClockwise(270, 0.6);
 
-    verifyRunToPosition(270 * 2, -270 * 2, 0.6, -0.6);
+    verifyRunToPosition(270 * 2, -270 * 2, 0.6, 0.6);
   }
 
   @Test
   public void rotateClockwiseNegativeDegree() {
     driveTrain.rotateClockwise(-45, 0.4);
 
-    verifyRunToPosition((360-45) * 2, (45-360) * 2, 0.4, -0.4);
+    verifyRunToPosition((-45) * 2, 45 * 2, 0.4, 0.4);
   }
 
   @Test
   public void rotateClockwiseNegativePower() {
     driveTrain.rotateClockwise(45, -0.4);
 
-    verifyRunToPosition(45 * 2, -45 * 2, 0.4, -0.4);
+    verifyRunToPosition(45 * 2, -45 * 2, 0.4, 0.4);
   }
 
   @Test
   public void rotateCounterClockwise() {
     driveTrain.rotateCounterClockwise(70, 0.2);
 
-    verifyRunToPosition(-70 * 2, 70 * 2, -0.2, 0.2);
+    verifyRunToPosition(-70 * 2, 70 * 2, 0.2, 0.2);
   }
 
   @Test
   public void rotateCounterClockwiseNegativePower() {
     driveTrain.rotateCounterClockwise(80, -0.3);
 
-    verifyRunToPosition(-80 * 2, 80 * 2, -0.3, 0.3);
+    verifyRunToPosition(-80 * 2, 80 * 2, 0.3, 0.3);
   }
 
   @Test
   public void rotateCounterClockwiseNegativeDegree() {
     driveTrain.rotateCounterClockwise(-50, 0.5);
 
-    verifyRunToPosition((50-360) * 2, (360-50) * 2, -0.5, 0.5);
+    verifyRunToPosition(50 * 2, -50 * 2, 0.5, 0.5);
   }
 
   @Test

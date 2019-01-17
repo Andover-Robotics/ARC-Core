@@ -101,11 +101,6 @@ public class TankDrive extends DriveTrain {
     }
 
     double power = Math.abs(Range.clip(givenPower, -1, 1));
-
-    if (displacementInInches < 0) {
-      power *= -1;
-    }
-
     double robotTurn = displacementInInches * ticksPerInch;
 
     runWithEncoder((int) robotTurn, (int) robotTurn, power, power);
@@ -113,7 +108,7 @@ public class TankDrive extends DriveTrain {
 
   @Override
   public void driveBackwards(double distanceInInches, double power) {
-    driveWithEncoder(-Math.abs(distanceInInches), -Math.abs(power));
+    driveWithEncoder(-Math.abs(distanceInInches), power);
   }
 
   @Override

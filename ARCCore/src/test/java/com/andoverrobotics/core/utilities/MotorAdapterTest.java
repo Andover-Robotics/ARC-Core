@@ -77,7 +77,7 @@ public class MotorAdapterTest {
 
     verify(targetMotor).setMode(RunMode.RUN_TO_POSITION);
     verify(targetMotor).setTargetPosition(20 - 100);
-    verify(targetMotor).setPower(-1);
+    verify(targetMotor).setPower(1);
   }
 
   @Test
