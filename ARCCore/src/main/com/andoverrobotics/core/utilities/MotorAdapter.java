@@ -45,7 +45,7 @@ public class MotorAdapter implements IMotor {
 
     setMode(RunMode.RUN_TO_POSITION);
     addTargetPosition(tickOffset);
-    setPower(tickOffset > 0 ? Math.abs(absPower) : -Math.abs(absPower));
+    setPower(absPower);
   }
 
   @Override

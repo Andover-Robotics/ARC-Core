@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 public abstract class DriveTrain {
 
   protected final OpMode opMode;
-  protected double defaultPower;
+  protected double defaultPower = 0.7;
 
   protected DriveTrain(OpMode opMode) {
     this.opMode = opMode;

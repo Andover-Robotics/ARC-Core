@@ -47,7 +47,7 @@ public class MotorPair implements IMotor {
 
     setMode(RunMode.RUN_TO_POSITION);
     addTargetPosition(tickOffset);
-    setPower(tickOffset > 0 ? Math.abs(absPower) : -Math.abs(absPower));
+    setPower(Math.abs(absPower));
   }
 
   @Override
