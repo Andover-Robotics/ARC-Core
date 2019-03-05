@@ -169,5 +169,17 @@ public abstract class StrafingDriveTrain extends DriveTrain {
    * @param direction The direction in which to strafe
    * @param power The power at which to strafe, between -1 and 1, inclusive
    */
-  public abstract void setStrafe(Coordinate direction, double power);
+  public final void setStrafe(Coordinate direction, double power) {
+    setStrafeRotation(direction, power, 0);
+  }
+
+  /**
+   * Lets the robot strafe in the direction of <code>direction</code> at the given <code>strafePower</code>
+   * while simultaneously turning by <code>rotatePower</code>.
+   *
+   * @param direction The direction in which to strafe
+   * @param strafePower The power at which to strafe, between -1 and 1, inclusive
+   * @param rotatePower The power at which to turn the robot in place, between -1 and 1, inclusive; positive means clockwise
+   */
+  public abstract void setStrafeRotation(Coordinate direction, double strafePower, double rotatePower);
 }

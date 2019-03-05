@@ -19,41 +19,35 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class MecanumDrive extends StrafingDriveTrain {
 
-  private final MotorAdapter motorFL, motorFR, motorBL, motorBR;
+  private final MotorAdapter
+      motorLeftDiagonalLeftSide, motorRightDiagonalLeftSide,
+      motorLeftDiagonalRightSide, motorRightDiagonalRightSide;
   private final int ticksPerInch, ticksPer360;
-  private final MotorAdapter[] leftDiagonal, rightDiagonal;
 
   /**
-   * Constructs a new <code>MecanumDrive</code> instance with the given {@link IMotor}s and encoder
+   * Constructs a new <code>MecanumDrive</code> instance with the given {@link DcMotor}s and encoder
    * parameters.
    *
-   * @param motorFL The {@link MotorAdapter} that represents front left motor
-   * @param motorFR The {@link MotorAdapter} that represents the front right motor
-   * @param motorBL The {@link MotorAdapter} that represents the back left motor
-   * @param motorBR The {@link MotorAdapter} that represents the back right motor
-   * @param leftDiagonal The array of DcMotors that, when given positive power, causes the robot to
-   * move toward the front-left diagonal
-   * @param rightDiagonal The array of DcMotors that, when given positive power, causes the robot to
-   * move toward the front-right diagonal
+   * @param leftDiagLeftSide The motor that is on the left side of the robot and (when powered positively) causes the robot to strafe to the front-left diagonal
+   * @param leftDiagRightSide The motor that is on the right side of the robot and (when powered positively) causes the robot to strafe to the front-left diagonal
+   * @param rightDiagLeftSide The motor that is on the left side of the robot and (when powered positively) causes the robot to strafe to the front-right diagonal
+   * @param rightDiagRightSide The motor that is on the right side of the robot and (when powered positively) causes the robot to strafe to the front-right diagonal
    * @param opMode The main {@link OpMode}
    * @param ticksPerInch The number of encoder ticks required to cause a diagonal displacement of 1
    * inch for the robot
    * @param ticksPer360 The number of encoder ticks required to cause a full rotation for the robot,
    * when this amount is applied to the left and right sides in opposite directions
    */
-  public MecanumDrive(MotorAdapter motorFL, MotorAdapter motorFR, MotorAdapter motorBL,
-      MotorAdapter motorBR,
-      MotorAdapter[] leftDiagonal, MotorAdapter[] rightDiagonal,
+  public MecanumDrive(MotorAdapter leftDiagLeftSide, MotorAdapter leftDiagRightSide,
+      MotorAdapter rightDiagLeftSide, MotorAdapter rightDiagRightSide,
       OpMode opMode, int ticksPerInch, int ticksPer360) {
 
     super(opMode);
 
-    this.motorFL = motorFL;
-    this.motorFR = motorFR;
-    this.motorBL = motorBL;
-    this.motorBR = motorBR;
-    this.leftDiagonal = leftDiagonal;
-    this.rightDiagonal = rightDiagonal;
+    motorLeftDiagonalLeftSide = leftDiagLeftSide;
+    motorLeftDiagonalRightSide = leftDiagRightSide;
+    motorRightDiagonalLeftSide = rightDiagLeftSide;
+    motorRightDiagonalRightSide = rightDiagRightSide;
 
     this.ticksPerInch = ticksPerInch;
     this.ticksPer360 = ticksPer360;
@@ -91,21 +85,8 @@ public class MecanumDrive extends StrafingDriveTrain {
     // | |
     // \-/
 
-    MotorAdapter fl = new MotorAdapter(motorFL), fr = new MotorAdapter(
-        motorFR), bl = new MotorAdapter(motorBL), br = new MotorAdapter(motorBR);
-
-    return new MecanumDrive(fl,
-        fr,
-        bl,
-        br,
-        new MotorAdapter[]{
-            fr,
-            bl
-        },
-        new MotorAdapter[]{
-            fl,
-            br
-        }, opMode, ticksPerInch, ticksPer360);
+    return new MecanumDrive(new MotorAdapter(motorBL), new MotorAdapter(motorFR),
+        new MotorAdapter(motorFL), new MotorAdapter(motorBR), opMode, ticksPerInch, ticksPer360);
   }
 
   /**
@@ -139,21 +120,9 @@ public class MecanumDrive extends StrafingDriveTrain {
     // | |
     // /-\
 
-    MotorAdapter fl = new MotorAdapter(motorFL), fr = new MotorAdapter(
-        motorFR), bl = new MotorAdapter(motorBL), br = new MotorAdapter(motorBR);
-
-    return new MecanumDrive(fl,
-        fr,
-        bl,
-        br,
-        new MotorAdapter[]{
-            fl,
-            br
-        },
-        new MotorAdapter[]{
-            fr,
-            bl
-        }, opMode, ticksPerInch, ticksPer360);
+    return new MecanumDrive(
+        new MotorAdapter(motorFL), new MotorAdapter(motorBR),
+        new MotorAdapter(motorBL), new MotorAdapter(motorFR), opMode, ticksPerInch, ticksPer360);
   }
 
   // Rotates the given displacement by 45deg clockwise, assigns its components to the diagonals as
@@ -176,18 +145,15 @@ public class MecanumDrive extends StrafingDriveTrain {
     double leftPower = Math.abs(clippedPower * (diagonalOffsets.getY() / maxOffset)),
         rightPower = Math.abs(clippedPower * (diagonalOffsets.getX() / maxOffset));
 
-    for (MotorAdapter motor : leftDiagonal) {
+    for (MotorAdapter motor : leftDiagonal())
       motor.startRunToPosition(leftOffset, leftPower);
-    }
-    for (MotorAdapter motor : rightDiagonal) {
+    for (MotorAdapter motor : rightDiagonal())
       motor.startRunToPosition(rightOffset, rightPower);
-    }
 
     while (isBusy() && opModeIsActive()) {
     }
 
     stop();
-    setMotorMode(RUN_USING_ENCODER);
   }
 
   @Override
@@ -205,12 +171,11 @@ public class MecanumDrive extends StrafingDriveTrain {
     double clippedPower = Math.abs(Range.clip(power, -1, 1));
     double rotationTicks = degrees / 360.0 * ticksPer360;
 
-    for (MotorAdapter motor : leftSide()) {
+    for (MotorAdapter motor : leftSide())
       motor.startRunToPosition((int) -rotationTicks, clippedPower);
-    }
-    for (MotorAdapter motor : rightSide()) {
+    for (MotorAdapter motor : rightSide())
       motor.startRunToPosition((int) rotationTicks, clippedPower);
-    }
+
 
     while (isBusy() && opModeIsActive()) {
     }
@@ -220,25 +185,39 @@ public class MecanumDrive extends StrafingDriveTrain {
   }
 
   private MotorAdapter[] leftSide() {
-    return new MotorAdapter[]{
-        motorFL,
-        motorBL
+    return new MotorAdapter[] {
+        motorRightDiagonalLeftSide,
+        motorLeftDiagonalLeftSide
     };
   }
 
   private MotorAdapter[] rightSide() {
-    return new MotorAdapter[]{
-        motorFR,
-        motorBR
+    return new MotorAdapter[] {
+        motorRightDiagonalRightSide,
+        motorLeftDiagonalRightSide
+    };
+  }
+
+  private MotorAdapter[] leftDiagonal() {
+    return new MotorAdapter[] {
+        motorLeftDiagonalLeftSide,
+        motorLeftDiagonalRightSide
+    };
+  }
+
+  private MotorAdapter[] rightDiagonal() {
+    return new MotorAdapter[] {
+        motorRightDiagonalLeftSide,
+        motorRightDiagonalRightSide
     };
   }
 
   private MotorAdapter[] allMotors() {
-    return new MotorAdapter[]{
-        motorFL,
-        motorFR,
-        motorBL,
-        motorBR
+    return new MotorAdapter[] {
+        motorRightDiagonalRightSide,
+        motorRightDiagonalLeftSide,
+        motorLeftDiagonalRightSide,
+        motorLeftDiagonalLeftSide
     };
   }
 
@@ -275,19 +254,31 @@ public class MecanumDrive extends StrafingDriveTrain {
   }
 
   @Override
-  public void setStrafe(Coordinate offset, double unscaledPower) {
-    double direction = Converter.degreesToRadians(offset.getPolarDirection() - 45);
-    double magnitude = Math.min(1, offset.getPolarDistance());
-    double power = Range.clip(unscaledPower, -1, 1);
+  public void setStrafeRotation(Coordinate direction, double strafePower, double z) {
+    Coordinate xy = direction.getPolarDistance() < 1e-5 ? Coordinate.fromXY(0, 0) :
+        Coordinate.fromPolar(1, direction.getPolarDirection());
+    double x = xy.getX(), y = xy.getY(),
+        rightDiagonalLeftSide = x + y + z,
+        rightDiagonalRightSide = x + y - z,
+        leftDiagonalLeftSide = -x + y + z,
+        leftDiagonalRightSide = -x + y - z,
+        maxPower = Math.max(Math.max(Math.abs(rightDiagonalLeftSide), Math.abs(rightDiagonalRightSide)),
+            Math.max(Math.abs(leftDiagonalLeftSide), Math.abs(leftDiagonalRightSide))),
+        coefficient = maxPower == 0 ? 0 : Math.abs(strafePower) / maxPower;
 
-    setMotorMode(RUN_WITHOUT_ENCODER);
+    rightDiagonalLeftSide *= coefficient;
+    rightDiagonalRightSide *= coefficient;
+    leftDiagonalLeftSide *= coefficient;
+    leftDiagonalRightSide *= coefficient;
 
-    for (MotorAdapter motor : leftDiagonal) {
-      motor.setPower(Math.sin(direction) * magnitude * Math.abs(power));
+    for (MotorAdapter motor : allMotors()) {
+      motor.setMode(RUN_WITHOUT_ENCODER);
     }
-    for (MotorAdapter motor : rightDiagonal) {
-      motor.setPower(Math.cos(direction) * magnitude * Math.abs(power));
-    }
+
+    motorRightDiagonalLeftSide.setPower(rightDiagonalLeftSide);
+    motorRightDiagonalRightSide.setPower(rightDiagonalRightSide);
+    motorLeftDiagonalLeftSide.setPower(leftDiagonalLeftSide);
+    motorLeftDiagonalRightSide.setPower(leftDiagonalRightSide);
   }
 
   @Override
@@ -313,6 +304,11 @@ public class MecanumDrive extends StrafingDriveTrain {
 
   @Override
   protected IMotor[] getMotors() {
-    return allMotors();
+    return new MotorAdapter[] {
+        motorLeftDiagonalLeftSide,
+        motorLeftDiagonalRightSide,
+        motorRightDiagonalLeftSide,
+        motorRightDiagonalRightSide
+    };
   }
 }
