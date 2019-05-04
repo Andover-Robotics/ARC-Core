@@ -25,6 +25,7 @@ repositories {
     }
 
     jcenter()
+    google()
 }
 
 dependencies {
@@ -34,6 +35,10 @@ dependencies {
     implementation (name: 'FtcCommon-release', ext: 'aar')
     implementation (name:'Analytics-release', ext:'aar')
     implementation (name:'WirelessP2p-release', ext:'aar')
+
+    implementation 'org.mozilla:rhino:1.7.10'
+    implementation 'com.acmerobotics.roadrunner:core:0.2.5'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.2.3'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.18.3'

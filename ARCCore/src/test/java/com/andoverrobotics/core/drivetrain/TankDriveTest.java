@@ -25,6 +25,12 @@ public class TankDriveTest {
   }
 
   @Test
+  public void defaultDefaultPower() {
+    driveTrain.driveForwards(2);
+    verifyDrivenDisplacementWithPower(2, 0.8);
+  }
+
+  @Test
   public void driveForwards() {
     driveTrain.driveForwards(5, 0.5);
     verifyDrivenDisplacementWithPower(5, 0.5);
