@@ -6,9 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 /**
  * Adapts a DcMotor to the IMotor interface for the DriveTrains.
  */
-public class MotorAdapter implements IMotor {
-
-  private final DcMotor motor;
+public class MotorAdapter extends CachedMotor implements IMotor {
 
   /**
    * Creates a new MotorAdapter for the given motor.
@@ -16,28 +14,12 @@ public class MotorAdapter implements IMotor {
    * @param motor The motor to send commands to
    */
   public MotorAdapter(DcMotor motor) {
-    this.motor = motor;
-  }
-
-  /**
-   * @return The motor that this instance adapts
-   */
-  public DcMotor getMotor() {
-    return motor;
-  }
-
-  @Override
-  public void setPower(double power) {
-    motor.setPower(power);
-  }
-
-  public double getPower() {
-    return motor.getPower();
+    super(motor);
   }
   
   @Override
   public void addTargetPosition(int tickOffset) {
-    motor.setTargetPosition(motor.getCurrentPosition() + tickOffset);
+    setTargetPosition(motor.getCurrentPosition() + tickOffset);
   }
 
   @Override
@@ -50,11 +32,6 @@ public class MotorAdapter implements IMotor {
     setMode(RunMode.RUN_TO_POSITION);
     addTargetPosition(tickOffset);
     setPower(absPower);
-  }
-
-  @Override
-  public void setMode(RunMode mode) {
-    motor.setMode(mode);
   }
 
   @Override

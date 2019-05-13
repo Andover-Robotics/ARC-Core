@@ -252,8 +252,11 @@ public class MecanumDriveTest {
   }
 
   private void verifyPairPower(double power, DcMotor... pair) {
-    for (DcMotor motor : pair) {
-      verify(motor).setPower(AdditionalMatchers.eq(power, 1e-3));
+    // If the given power is 0, then CachedMotor would prevent the call to DcMotor
+    if (Math.abs(power) > 1e-4) {
+      for (DcMotor motor : pair) {
+        verify(motor).setPower(AdditionalMatchers.eq(power, 1e-3));
+      }
     }
   }
 }

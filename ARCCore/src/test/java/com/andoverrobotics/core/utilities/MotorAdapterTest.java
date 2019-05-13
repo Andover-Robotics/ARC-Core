@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import org.junit.After;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Matchers;
 
 public class MotorAdapterTest {
   private DcMotor targetMotor = mock(DcMotor.class);
@@ -27,7 +29,7 @@ public class MotorAdapterTest {
     verify(targetMotor).setPower(0);
 
     testee.setPower(2.0);
-    verify(targetMotor).setPower(2.0);
+    verify(targetMotor).setPower(1.0);
   }
 
   @Test
@@ -54,8 +56,9 @@ public class MotorAdapterTest {
   @Test
   public void addNegativeTargetPositionToPositive() {
     when(targetMotor.getCurrentPosition()).thenReturn(30);
-    testee.addTargetPosition(-30);
-    verify(targetMotor).setTargetPosition(0);
+
+    testee.addTargetPosition(-40);
+    verify(targetMotor).setTargetPosition(-10);
   }
 
   @Test
@@ -97,7 +100,8 @@ public class MotorAdapterTest {
 
     testee.startRunToPosition(0, 1);
 
-    verifyNoMoreInteractions(targetMotor);
+    verify(targetMotor, never()).setMode(RunMode.RUN_TO_POSITION);
+    verify(targetMotor, never()).setPower(ArgumentMatchers.anyDouble());
   }
 
   @Test
