@@ -1,6 +1,7 @@
 package com.andoverrobotics.core.examples;
 
 import com.andoverrobotics.core.drivetrain.MecanumDrive;
+import com.andoverrobotics.core.utilities.Coordinate;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -30,11 +31,8 @@ public class MecanumTeleOpExample extends OpMode {
   @Override
   public void loop() {
 
-    if (Math.abs(gamepad1.right_stick_x) > 0.1) {
-      mecanumDrive.setRotationPower(gamepad1.right_stick_x);
-    } else {
-      mecanumDrive.setStrafe(gamepad1.left_stick_x, -gamepad1.left_stick_y, 1);
-    }
+    mecanumDrive.setStrafeRotation(Coordinate.fromXY(gamepad1.left_stick_x, -gamepad1.left_stick_y),
+        Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.right_stick_x);
 
     telemetry.addData("Left stick X", gamepad1.left_stick_x);
     telemetry.addData("Left stick Y", -gamepad1.left_stick_y);

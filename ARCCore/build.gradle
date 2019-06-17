@@ -4,7 +4,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 23
     }
 
     compileSdkVersion 23
@@ -37,10 +37,10 @@ dependencies {
     implementation (name:'WirelessP2p-release', ext:'aar')
 
     implementation 'org.mozilla:rhino:1.7.10'
-    implementation 'com.acmerobotics.roadrunner:core:0.2.5'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.2.3'
+    implementation 'com.acmerobotics.roadrunner:core:0.4.2'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.3.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.18.3'
+    testImplementation 'org.mockito:mockito-core:2.28.2'
 }
 

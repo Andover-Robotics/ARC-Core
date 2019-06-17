@@ -26,11 +26,11 @@ public class TankDriveAutonomousExample extends LinearOpMode {
         waitForStart();
 
         for (int i = 0; i < 4; i++) {
-            tankDrive.driveForwards(36, 0.25);
+            tankDrive.driveForwards(36, 0.6);
             telemetry.addLine("Traveled 36 inches");
             telemetry.update();
 
-            tankDrive.rotateClockwise(90, 0.25);
+            tankDrive.rotateClockwise(90, 0.6);
             telemetry.addLine("Turned 90 degrees clockwise");
             telemetry.update();
         }
