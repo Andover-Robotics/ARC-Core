@@ -7,7 +7,7 @@ This is the common code base for the Andover Robotics teams. The code base of al
 * Tank Drive and Mecanum Drivetrain implementations with encoder support
 * Support for reading files from storage as configuration
 * PID controller implementation
-* Task System support using Jython
+* Task System support using JRuby
 
 ## Setting up your Team's Repository
 1. Perform `git init` locally to initialize an empty repository
@@ -15,8 +15,14 @@ This is the common code base for the Andover Robotics teams. The code base of al
 3. Perform `git pull upstream master --allow-unrelated-histories -f` in order to pull OpenRC's source code into your local repository
 4. Perform `git submodule add https://github.com/Andover-Robotics/ARC-Core`
 5. Set the `origin` remote to your team's repository by performing `git remote add origin <origin url in either https or ssh>`
-6. Push the local copy to the `origin` remote by performing `git push -u origin master`
+6. Add "ARC-Core" to the Android project by adding `, ':ARC-Core'` prior to `':TeamCode'` in `settings.gradle`
+7. Commit your changes
+8. Push the local copy to the `origin` remote by performing `git push -u origin master`
 
+After your repository is ready, make sure to copy the required native libraries onto your team's Robot Controller phone:
+
+1. > Copy `libVuforia.so` from the `doc` folder of this repo into the `FIRST` folder on the RC's internal storage_
+2. > Because EasyOpenCv depends on [OpenCV-Repackaged](https://github.com/OpenFTC/OpenCV-Repackaged), you will also need to copy [`libOpenCvNative.so`](https://github.com/OpenFTC/OpenCV-Repackaged/blob/master/doc/libOpenCvNative.so) from the `/doc` folder of that repo into the `FIRST` folder on the internal storage of the Robot Controller._
 ## Getting Help
 The Chief Software Officers of the 2019-2020 season, Michael Peng and Daniel Ivanovich, are eager to help you achieve your best. Feel free to approach them with questions.
 

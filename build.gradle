@@ -28,19 +28,53 @@ repositories {
     google()
 }
 
-dependencies {
-    implementation project(':FtcRobotController')
-    implementation (name: 'RobotCore-release', ext: 'aar')
-    implementation (name: 'Hardware-release', ext: 'aar')
-    implementation (name: 'FtcCommon-release', ext: 'aar')
-    implementation (name:'Analytics-release', ext:'aar')
-    implementation (name:'WirelessP2p-release', ext:'aar')
+apply from: '../moduleFlavors.gradle'
 
-    //implementation 'org.mozilla:rhino:1.7.10'
-    implementation 'com.acmerobotics.roadrunner:core:0.4.2'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.3.2'
+dependencies {
+    /*
+     * Other Modules
+     */
+    turboImplementation project(':FtcCommon')
+    turboImplementation project(':RobotCore')
+    turboImplementation project(':Inspection')
+    turboImplementation project(':Blocks')
+    turboImplementation project(':Hardware')
+    turboImplementation project(':RobotServer')
+    turboImplementation project(':OpenRC')
+
+    extremeTurboImplementation project(':FtcCommon')
+    extremeTurboImplementation project(':RobotCore')
+    extremeTurboImplementation project(':Inspection')
+    extremeTurboImplementation project(':Hardware')
+    extremeTurboImplementation project(':OpenRC')
+
+    stockImplementation 'org.openftc:ftccommon-stock:5.1'
+    stockImplementation 'org.openftc:robotcore-stock:5.1'
+    stockImplementation 'org.openftc:inspection-stock:5.1'
+    stockImplementation 'org.openftc:blocks-stock:5.1'
+    stockImplementation 'org.openftc:hardware-stock:5.1'
+    stockImplementation 'org.openftc:onbotjava-stock:5.1'
+    stockImplementation 'org.openftc:robotserver-stock:5.1'
+    stockImplementation 'com.android.support:support-compat:26.0.0'
+
+    /*
+     * Things needed regardless of turbo/extremeTurbo/stock
+     */
+    stockApi 'com.android.support:support-annotations:28.0.0'
+    stockApi 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    stockApi 'org.openftc:tfod-ftc-repackaged:5.0'
+
+    /*
+     * External
+     */
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    /* ARC-Core dependencies */
+    implementation 'com.acmerobotics.roadrunner:core:0.4.3'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.3.3'
+    implementation 'org.jruby:jruby-complete:9.2.8.0'
+    implementation 'org.openftc:easyopencv:1.1'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.28.2'
 }
-
