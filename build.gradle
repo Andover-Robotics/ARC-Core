@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 26
     }
 
@@ -48,14 +48,14 @@ dependencies {
     extremeTurboImplementation project(':Hardware')
     extremeTurboImplementation project(':OpenRC')
 
-    stockImplementation 'org.openftc:ftccommon-stock:5.1'
-    stockImplementation 'org.openftc:robotcore-stock:5.1'
-    stockImplementation 'org.openftc:inspection-stock:5.1'
-    stockImplementation 'org.openftc:blocks-stock:5.1'
-    stockImplementation 'org.openftc:hardware-stock:5.1'
-    stockImplementation 'org.openftc:onbotjava-stock:5.1'
-    stockImplementation 'org.openftc:robotserver-stock:5.1'
-    stockImplementation 'com.android.support:support-compat:26.0.0'
+    stockImplementation 'org.openftc:ftccommon-stock:5.2'
+    stockImplementation 'org.openftc:robotcore-stock:5.2'
+    stockImplementation 'org.openftc:inspection-stock:5.2'
+    stockImplementation 'org.openftc:blocks-stock:5.2'
+    stockImplementation 'org.openftc:hardware-stock:5.2'
+    stockImplementation 'org.openftc:onbotjava-stock:5.2'
+    stockImplementation 'org.openftc:robotserver-stock:5.2'
+    stockImplementation 'com.android.support:support-compat:26.1.0'
 
     /*
      * Things needed regardless of turbo/extremeTurbo/stock
@@ -70,9 +70,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     /* ARC-Core dependencies */
-    implementation 'com.acmerobotics.roadrunner:core:0.4.3'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.3.3'
-    implementation 'org.jruby:jruby-complete:9.2.8.0'
+    implementation 'com.acmerobotics.roadrunner:core:0.4.4'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.3.4'
+    implementation 'org.apache-extras.beanshell:bsh:2.0b6'
     implementation 'org.openftc:easyopencv:1.1'
 
     testImplementation 'junit:junit:4.12'
