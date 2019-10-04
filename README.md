@@ -9,7 +9,7 @@ Why do we designate it as a submodule? We would like to introduce new features a
 * Tank Drive and Mecanum Drivetrain implementations with encoder support
 * Support for reading files from storage as configuration
 * PID controller implementation
-* Task System support using JRuby
+* Task System support using BeanShell
 * Optimizing hardware wrapper classes like `CachedMotor`
 
 ## Setting up your Team's Repository
@@ -20,8 +20,9 @@ _This section is intended for the programming leaders of each team._
 4. Perform `git submodule add https://github.com/Andover-Robotics/ARC-Core`
 5. Set the `origin` remote to your team's repository by performing `git remote add origin <origin url in either https or ssh>`
 6. Add "ARC-Core" to the Android project by adding `, ':ARC-Core'` prior to `':TeamCode'` in `settings.gradle`
-7. Commit your changes
-8. Push the local copy to the `origin` remote by performing `git push -u origin master`
+7. Set the `minSdkVersion` on line 41 of `build.common.gradle` from 19 to 24
+8. Commit your changes
+9. Push the local copy to the `origin` remote by performing `git push -u origin master`
 
 After your repository is ready, make sure to copy the required resources onto your team's Robot Controller phone:
 
