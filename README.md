@@ -11,6 +11,7 @@ Why do we designate it as a submodule? We would like to introduce new features a
 * PID controller implementation
 * Task System support using BeanShell
 * Optimizing hardware wrapper classes like `CachedMotor`
+* _ARC Toolbox_: Collection of hardware diagnostic OpModes
 
 ## Setting up your Team's Repository
 _This section is intended for the programming leaders of each team._
@@ -32,6 +33,9 @@ After your repository is ready, make sure to copy the required resources onto yo
 
 (For reference, the FIRST folder's full path is `/storage/self/primary/FIRST`.)
 
+## Keeping your Submodule Up-to-Date
+
+Throughout the season, the CSOs will push fixes and new features to ARC-Core as necessary. To incorporate a change from this repository into your submodule, execute `git submodule update --remote` in your local repository and push the resulting changes to your team's GitHub repository.
 ## Getting Help
 
 If you wish to receive clarification or assistance in troubleshooting a problem, please check [the ARC-Core JavaDocs](https://Andover-Robotics.github.io/ARC-Core) and [ARC Software](https://andover-robotics.gitbook.io/arc-software/).
