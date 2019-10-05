@@ -21,7 +21,7 @@ public class ConverterTest {
   }
 
   @Test
-      public void degreesToRadiansAboveRange() {
+  public void degreesToRadiansAboveRange() {
     assertEquals(0.0, Converter.degreesToRadians(720), 1e-7);
     assertEquals(Math.PI, Converter.degreesToRadians(180 + 360 * 3), 1e-7);
   }
