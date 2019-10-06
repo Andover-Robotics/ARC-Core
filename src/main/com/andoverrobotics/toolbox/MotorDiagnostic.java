@@ -27,6 +27,7 @@ public class MotorDiagnostic extends OpMode {
   public void init_loop() {
     input.update();
     telemetry.addData("Selected motor", motorSelector.selected());
+    telemetry.addLine("Press X to select next");
   }
 
   @Override
