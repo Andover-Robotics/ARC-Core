@@ -15,7 +15,7 @@ public class CachedMotor {
     this.motor = motor;
 
     power = motor.getPower();
-    targetPosition = motor.getTargetPosition();
+    targetPosition = Integer.MIN_VALUE;
     mode = motor.getMode();
   }
 

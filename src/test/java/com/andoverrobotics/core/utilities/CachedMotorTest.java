@@ -1,7 +1,6 @@
 package com.andoverrobotics.core.utilities;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,6 +47,18 @@ public class CachedMotorTest {
 
     motor.setTargetPosition(20);
     verify(dcMotor).setTargetPosition(20);
+  }
+
+  // The SDK requires us to set a target position before setting the mode to RUN_TO_POSITION.
+  // Therefore, the initial target position is UNDEFINED, not 0.
+  // If we set the target position to 0 in our first call to setTargetPosition, it should probably go through.
+  @Test
+  public void initialSetTargetPositionToZeroPassesThrough() {
+    motor.setTargetPosition(0);
+    verify(dcMotor).setTargetPosition(0);
+
+    motor.setTargetPosition(0);
+    verifyNoMoreInteractions(dcMotor);
   }
 
   @Test

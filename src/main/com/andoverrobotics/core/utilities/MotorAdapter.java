@@ -23,18 +23,6 @@ public class MotorAdapter extends CachedMotor implements IMotor {
   }
 
   @Override
-  public void startRunToPosition(int tickOffset, double power) {
-    double absPower = Math.abs(power);
-    if (tickOffset == 0 || absPower < 1e-5) {
-      return;
-    }
-
-    setMode(RunMode.RUN_TO_POSITION);
-    addTargetPosition(tickOffset);
-    setPower(absPower);
-  }
-
-  @Override
   public boolean isBusy() {
     return motor.isBusy();
   }

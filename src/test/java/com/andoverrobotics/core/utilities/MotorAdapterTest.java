@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InOrder;
 import org.mockito.Matchers;
 
 public class MotorAdapterTest {
@@ -67,9 +68,7 @@ public class MotorAdapterTest {
 
     testee.startRunToPosition(100, 1);
 
-    verify(targetMotor).setMode(RunMode.RUN_TO_POSITION);
-    verify(targetMotor).setTargetPosition(100);
-    verify(targetMotor).setPower(1);
+    verifyStartRunToPosition(100, 1);
   }
 
   @Test
@@ -78,9 +77,7 @@ public class MotorAdapterTest {
 
     testee.startRunToPosition(-100, -1);
 
-    verify(targetMotor).setMode(RunMode.RUN_TO_POSITION);
-    verify(targetMotor).setTargetPosition(20 - 100);
-    verify(targetMotor).setPower(1);
+    verifyStartRunToPosition(20 - 100, 1);
   }
 
   @Test
@@ -89,9 +86,7 @@ public class MotorAdapterTest {
 
     testee.startRunToPosition(200, -0.7);
 
-    verify(targetMotor).setMode(RunMode.RUN_TO_POSITION);
-    verify(targetMotor).setTargetPosition(200);
-    verify(targetMotor).setPower(0.7);
+    verifyStartRunToPosition(200, 0.7);
   }
 
   @Test
@@ -123,5 +118,12 @@ public class MotorAdapterTest {
 
     when(targetMotor.isBusy()).thenReturn(true);
     assertTrue(testee.isBusy());
+  }
+
+  private void verifyStartRunToPosition(int target, double power) {
+    InOrder order = inOrder(targetMotor);
+    order.verify(targetMotor).setTargetPosition(target);
+    order.verify(targetMotor).setMode(RunMode.RUN_TO_POSITION);
+    order.verify(targetMotor).setPower(power);
   }
 }

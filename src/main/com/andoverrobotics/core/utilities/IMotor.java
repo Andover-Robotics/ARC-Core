@@ -25,10 +25,19 @@ public interface IMotor {
    * Starts moving to the specified target position with the given power.
    *
    * @param tickOffset The number of ticks to travel, which specifies the direction and distance of
-   * travel
-   * @param power The power to assign to the motors
+   *                   travel
+   * @param power      The power to assign to the motors
    */
-  void startRunToPosition(int tickOffset, double power);
+  default void startRunToPosition(int tickOffset, double power) {
+    double absPower = Math.abs(power);
+    if (tickOffset == 0 || absPower < 1e-5) {
+      return;
+    }
+
+    addTargetPosition(tickOffset);
+    setMode(RunMode.RUN_TO_POSITION);
+    setPower(Math.abs(absPower));
+  }
 
   /**
    * Sets the {@link com.qualcomm.robotcore.hardware.DcMotor.RunMode} of the motor(s).
